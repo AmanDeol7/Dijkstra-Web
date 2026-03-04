@@ -41,9 +41,14 @@ export async function apiCall<T = unknown>(
       ? path.replace(/^\/+|\/+$/g, "")
       : path.map((s) => String(s).replace(/^\/+|\/+$/g, "")).join("/");
   const fullPath = `${service}/${pathStr}`;
-  const url = `/api/${fullPath}`;
+  let url = `/api/${fullPath}`;
   const method = init?.method ?? "GET";
+  const base =
+  typeof window === "undefined"
+    ? process.env.NEXTAUTH_URL
+    : "";
 
+  url = `${base}/api/${fullPath}`;
   const response = await fetch(url, {
     ...init,
     method,
