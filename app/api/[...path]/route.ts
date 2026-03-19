@@ -2,8 +2,7 @@
 // Internal: /api/<service>/<path> → proxyToBackend (dataforge, gitripper, helios, archivist).
 // External: /api/<service>/<path> → handleExternalService (configured in lib/api/external-services.ts).
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '../auth/[...nextauth]/authOptions'
+import { auth } from '@/lib/auth/auth'
 import {
   getArchivistBaseUrl,
   getDataForgeBaseUrl,
@@ -30,10 +29,28 @@ function getBaseUrlForInternalService(service: string): string | null {
 }
 
 async function proxyToBackend(req: NextRequest, path: string[]) {
-  const session = await getServerSession(authOptions)
+  const session = await auth.api.getSession({
+    headers: {
+      cookie: req.headers.get("cookie") || "",
+    },
+  })
 
-  if (!session?.user?.access_token) {
+  if (!session?.user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const tokenData = await auth.api.getAccessToken({
+    body: {
+      providerId: "github",
+      userId: session.user.id,
+    },
+    headers: {
+      cookie: req.headers.get("cookie") || "",
+    },
+  })
+
+  if (!tokenData?.accessToken) {
+    return NextResponse.json({ error: "No GitHub access token" }, { status: 401 })
   }
 
   const [service, ...backendPathSegments] = path
@@ -60,7 +77,7 @@ async function proxyToBackend(req: NextRequest, path: string[]) {
     method: req.method,
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${session.user.access_token}`,
+      Authorization: `Bearer ${tokenData.accessToken}`,
       'X-Internal-Secret': process.env.INTERNAL_API_SECRET!,
     },
     body: req.method !== 'GET' && req.method !== 'DELETE'

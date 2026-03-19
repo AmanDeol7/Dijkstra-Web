@@ -1,33 +1,51 @@
 import { betterAuth } from "better-auth";
 import { nextCookies } from "better-auth/next-js";
+import { authPgPool } from "../db/postgres";
 
+function requireEnv(key: string): string {
+    const value = process.env[key];
+    if (!value) throw new Error(`Missing environment variable: ${key}`);
+    return value;
+}
+
+// TODO: https://better-auth.com/docs/concepts/database#extending-core-schema
 export const auth = betterAuth({
+/*
+    user: {
+        additionalFields: {
+          role: {
+            type: ["user", "admin"],
+            required: false,
+            defaultValue: "user",
+            input: false, // don't allow user to set role
+          },
+          username: {
+            type: "string",
+            required: true,
+          },
+        },
+      },
+*/
+    database: authPgPool,
     session: {
-        /**
-         * Stateless, encrypted (JWE-style) session cookies with a small cookie cache
-         * to keep RSC and client in sync without a server-side session store.
-         */
         cookieCache: {
             enabled: true,
             maxAge: 300, // 5 minutes
-            refreshCache: {
-                updateAge: 60, // Refresh when 60 seconds remain before expiry
-            },
         },
     },
     socialProviders: {
         github: {
             // Use GitHub App OAuth credentials instead of classic OAuth app
-            clientId: process.env.GITHUB_APP_CLIENT_ID as string,
-            clientSecret: process.env.GITHUB_APP_CLIENT_SECRET as string,
+            clientId: requireEnv("GITHUB_APP_CLIENT_ID"),
+            clientSecret: requireEnv("GITHUB_APP_CLIENT_SECRET"),
         },
         linkedin: {
-            clientId: process.env.LINKEDIN_CLIENT_ID as string,
-            clientSecret: process.env.LINKEDIN_CLIENT_SECRET as string,
+            clientId: requireEnv("LINKEDIN_CLIENT_ID"),
+            clientSecret: requireEnv("LINKEDIN_CLIENT_SECRET"),
         },
         discord: {
-            clientId: process.env.DISCORD_CLIENT_ID as string,
-            clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
+            clientId: requireEnv("DISCORD_CLIENT_ID"),
+            clientSecret: requireEnv("DISCORD_CLIENT_SECRET"),
             permissions: 2048 | 16384,
         },
     },
