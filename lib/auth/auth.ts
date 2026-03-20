@@ -8,46 +8,63 @@ function requireEnv(key: string): string {
     return value;
 }
 
-// TODO: https://better-auth.com/docs/concepts/database#extending-core-schema
 export const auth = betterAuth({
-/*
-    user: {
-        additionalFields: {
-          role: {
-            type: ["user", "admin"],
-            required: false,
-            defaultValue: "user",
-            input: false, // don't allow user to set role
-          },
-          username: {
-            type: "string",
-            required: true,
-          },
-        },
+  user: {
+    additionalFields: {
+      role: {
+        type: ["user", "admin"],
+        required: false,
+        defaultValue: "user",
+        input: false, // don't allow user to set role
       },
-*/
-    database: authPgPool,
-    session: {
-        cookieCache: {
-            enabled: true,
-            maxAge: 300, // 5 minutes
-        },
+      username: {
+        type: "string",
+        required: false,
+        returned: true,
+      },
+      completedOnboarding: {
+        type: "boolean",
+        required: false,
+        defaultValue: false,
+        returned: true,
+      },
+      onboardingStep: {
+        type: "number",
+        required: false,
+        defaultValue: 1,
+        returned: true,
+      },
     },
-    socialProviders: {
-        github: {
-            // Use GitHub App OAuth credentials instead of classic OAuth app
-            clientId: requireEnv("GITHUB_APP_CLIENT_ID"),
-            clientSecret: requireEnv("GITHUB_APP_CLIENT_SECRET"),
-        },
-        linkedin: {
-            clientId: requireEnv("LINKEDIN_CLIENT_ID"),
-            clientSecret: requireEnv("LINKEDIN_CLIENT_SECRET"),
-        },
-        discord: {
-            clientId: requireEnv("DISCORD_CLIENT_ID"),
-            clientSecret: requireEnv("DISCORD_CLIENT_SECRET"),
-            permissions: 2048 | 16384,
-        },
+  },
+  database: authPgPool,
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: 300, // 5 minutes
     },
-    plugins: [nextCookies()],
+  },
+  socialProviders: {
+    github: {
+      // Use GitHub App OAuth credentials instead of classic OAuth app
+      clientId: requireEnv("GITHUB_APP_CLIENT_ID"),
+      clientSecret: requireEnv("GITHUB_APP_CLIENT_SECRET"),
+      mapProfileToUser: (profile: { login?: string }) => ({
+        username: profile.login ?? "",
+        completedOnboarding: false,
+        onboardingStep: 1,
+        role: "user",
+      }),
+    },
+    linkedin: {
+      clientId: requireEnv("LINKEDIN_CLIENT_ID"),
+      clientSecret: requireEnv("LINKEDIN_CLIENT_SECRET"),
+      scope: ["r_liteprofile", "r_basicprofile"],
+    },
+    discord: {
+      clientId: requireEnv("DISCORD_CLIENT_ID"),
+      clientSecret: requireEnv("DISCORD_CLIENT_SECRET"),
+      permissions: 2048 | 16384,
+    },
+  },
+  plugins: [nextCookies()],
 });
