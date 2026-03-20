@@ -9,57 +9,15 @@ import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { useRouter, useSearchParams } from "next/navigation"
 import BackgroundPaths from "@/components/kokonutui/background-paths"
-
-const steps = [
-  {
-    id: 1,
-    title: "Sign up at LeetCode",
-    description: "Create your account to start practicing coding problems",
-    image: "/images/leetcode-step1.png",
-    link: "https://leetcode.com/signup",
-    details:
-      "Visit leetcode.com/signup and create your account. You can sign up with email or use your Google/GitHub account for convenience. Choose a username you'll be proud to share with potential employers.",
-  },
-  {
-    id: 2,
-    title: "Choose your topics of interest",
-    description: "Select programming topics that align with your goals",
-    image: "/images/leetcode-step2.png",
-    details:
-      "LeetCode will ask about your programming interests and experience level. Select topics like algorithms, data structures, databases, or specific areas you want to focus on. This helps personalize your problem recommendations.",
-  },
-  {
-    id: 3,
-    title: "Attempt your first problem",
-    description: "Start with an easy problem to get familiar with the platform",
-    image: "/images/leetcode-step3.png",
-    details:
-      "Navigate to the Problems section and filter by 'Easy' difficulty. Pick a simple problem like 'Two Sum' or 'Valid Parentheses'. Read the problem carefully, understand the examples, and try to solve it step by step.",
-  },
-  {
-    id: 4,
-    title: "View the solutions tab",
-    description: "Learn from community solutions and editorial explanations",
-    image: "/images/leetcode-step4.png",
-    details:
-      "After attempting a problem, check the Solutions tab to see different approaches. The Editorial provides official explanations, while Discuss shows community solutions. Compare your approach with others to learn new techniques.",
-  },
-  {
-    id: 5,
-    title: "Track your progress using the streak counter",
-    description: "Build consistency with daily practice tracking",
-    image: "/images/leetcode-step5.png",
-    details:
-      "LeetCode tracks your daily practice streak. Aim to solve at least one problem daily to maintain your streak. You can view your progress statistics, success rate, and areas for improvement in your profile dashboard.",
-  },
-]
+import { leetcodeOnboardingInformation } from "@/data/onboarding-information"
 
 export default function LeetCodeHelpPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [currentStep, setCurrentStep] = useState(0)
   const [completedSteps, setCompletedSteps] = useState<number[]>([])
-
+  const steps = leetcodeOnboardingInformation
+  
   // Get the step parameter from URL to know which onboarding step to return to
   const returnStep = searchParams.get("step") || "5"
 

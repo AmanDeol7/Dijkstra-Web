@@ -9,57 +9,14 @@ import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { useRouter, useSearchParams } from "next/navigation"
 import BackgroundPaths from "@/components/kokonutui/background-paths"
-
-const steps = [
-  {
-    id: 1,
-    title: "Create a Discord account",
-    description: "Sign up for Discord to join our community",
-    image: "/images/discord-step1.png",
-    link: "https://discord.com/register",
-    details:
-      "Visit discord.com/register and create your account using an email address and password. Choose a username that represents you well in our community.",
-  },
-  {
-    id: 2,
-    title: "What is a server and what are channels",
-    description: "Understand Discord's basic structure",
-    image: "/images/discord-step2.png",
-    details:
-      "Servers are communities where people gather around topics. Channels are like rooms within servers for specific conversations. Text channels are for messaging, voice channels are for talking.",
-  },
-  {
-    id: 3,
-    title: "How to join our Discord server",
-    description: "Use our invite link to join the Dijkstra community",
-    image: "/images/discord-step3.png",
-    link: "https://discord.gg/dijkstra",
-    details:
-      "Click our invite link to join the Dijkstra Discord server. You'll automatically be added to our community where you can ask questions, share projects, and connect with other learners.",
-  },
-  {
-    id: 4,
-    title: "Understanding voice channels and muting",
-    description: "Learn about voice features and audio controls",
-    image: "/images/discord-step4.png",
-    details:
-      "Voice channels allow real-time conversations. You can mute/unmute yourself and control your audio settings. Use voice channels for study sessions, code reviews, and group discussions.",
-  },
-  {
-    id: 5,
-    title: "Set your nickname and profile picture",
-    description: "Personalize your presence in the server",
-    image: "/images/discord-step5.png",
-    details:
-      "Right-click on your name in the member list to set a server nickname. Upload a profile picture in User Settings to help others recognize you in conversations.",
-  },
-]
+import { discordOnboardingInformation } from "@/data/onboarding-information"
 
 export default function DiscordHelpPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [currentStep, setCurrentStep] = useState(0)
   const [completedSteps, setCompletedSteps] = useState<number[]>([])
+  const steps = discordOnboardingInformation
 
   // Get the step parameter from URL to know which onboarding step to return to
   const returnStep = searchParams.get("step") || "4"

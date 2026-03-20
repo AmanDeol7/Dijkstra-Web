@@ -20,56 +20,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import BackgroundPaths from "@/components/kokonutui/background-paths"
-
-const steps = [
-  {
-    id: 1,
-    title: "Sign up for GitHub",
-    description: "Create your free GitHub account",
-    image: "/images/github-step1.png",
-    link: "https://github.com/signup",
-    details:
-      "Visit github.com/signup and create your account using your email address. Choose a professional username that you'll be comfortable sharing with employers and collaborators.",
-  },
-  {
-    id: 2,
-    title: "Verify your email address",
-    description: "Complete the email verification process",
-    image: "/images/github-step2.png",
-    details:
-      "Check your email inbox for a verification message from GitHub. Click the verification link to activate your account and unlock all GitHub features.",
-  },
-  {
-    id: 3,
-    title: "Complete your profile",
-    description: "Add a profile picture, bio, and location",
-    image: "/images/github-step3.png",
-    details:
-      "Upload a professional profile picture, write a brief bio describing your interests, and add your location. A complete profile makes a better first impression on potential collaborators.",
-  },
-  {
-    id: 4,
-    title: "Create your first repository",
-    description: "Set up your first project repository",
-    image: "/images/github-step4.png",
-    details:
-      "Click the 'New' button to create your first repository. Choose a descriptive name, add a README file, and select a license. This will be your first project on GitHub!",
-  },
-  {
-    id: 5,
-    title: "Explore GitHub features",
-    description: "Discover issues, pull requests, and collaboration tools",
-    image: "/images/github-step5.png",
-    details:
-      "Familiarize yourself with GitHub's key features: Issues for tracking bugs and features, Pull Requests for code collaboration, and Actions for automation. These tools are essential for professional development.",
-  },
-]
+import { githubOnboardingInformation } from "@/data/onboarding-information" 
 
 function GitHubHelpContent() {
   const searchParams = useSearchParams()
   const returnStep = searchParams.get("step") || "1"
   const [currentStep, setCurrentStep] = useState(0)
   const [completedSteps, setCompletedSteps] = useState<number[]>([])
+  const steps = githubOnboardingInformation
 
   const nextStep = () => {
     if (currentStep < steps.length - 1) {

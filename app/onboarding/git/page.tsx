@@ -20,56 +20,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import BackgroundPaths from "@/components/kokonutui/background-paths"
-
-const steps = [
-  {
-    id: 1,
-    title: "Download and install Git",
-    description: "Get Git installed on your operating system",
-    image: "/images/git-step1.png",
-    link: "https://git-scm.com/downloads",
-    details:
-      "Visit git-scm.com/downloads and download the appropriate version for your operating system. Follow the installation wizard with default settings for the best experience.",
-  },
-  {
-    id: 2,
-    title: "Configure your identity",
-    description: "Set up your name and email for commits",
-    image: "/images/git-step2.png",
-    details:
-      "Open your terminal or command prompt and run 'git config --global user.name \"Your Name\"' and 'git config --global user.email \"your.email@example.com\"' to set up your identity.",
-  },
-  {
-    id: 3,
-    title: "Learn basic commands",
-    description: "Master the essential Git commands",
-    image: "/images/git-step3.png",
-    details:
-      "Familiarize yourself with basic commands like 'git init', 'git add', 'git commit', 'git status', and 'git log'. These are the foundation of version control with Git.",
-  },
-  {
-    id: 4,
-    title: "Create your first repository",
-    description: "Initialize a new Git repository",
-    image: "/images/git-step4.png",
-    details:
-      "Create a new folder for your project, navigate to it in terminal, and run 'git init' to initialize a new Git repository. This creates a .git folder to track your changes.",
-  },
-  {
-    id: 5,
-    title: "Make your first commit",
-    description: "Save your first changes to Git history",
-    image: "/images/git-step5.png",
-    details:
-      "Create a file, add it with 'git add filename', and commit it with 'git commit -m \"Initial commit\"'. Congratulations, you've made your first commit!",
-  },
-]
+import { gitOnboardingInformation } from "@/data/onboarding-information"
 
 function GitHelpContent() {
   const searchParams = useSearchParams()
   const returnStep = searchParams.get("step") || "2"
   const [currentStep, setCurrentStep] = useState(0)
   const [completedSteps, setCompletedSteps] = useState<number[]>([])
+  const steps = gitOnboardingInformation
 
   const nextStep = () => {
     if (currentStep < steps.length - 1) {

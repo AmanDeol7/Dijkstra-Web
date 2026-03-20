@@ -9,65 +9,15 @@ import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { useRouter, useSearchParams } from "next/navigation"
 import BackgroundPaths from "@/components/kokonutui/background-paths"
-
-const steps = [
-  {
-    id: 1,
-    title: "Sign up at LinkedIn",
-    description: "Create your professional networking profile",
-    image: "/images/linkedin-step1.png",
-    link: "https://linkedin.com",
-    details:
-      "Visit linkedin.com and create your account using your professional email address. LinkedIn is the world's largest professional network, essential for career development and networking.",
-  },
-  {
-    id: 2,
-    title: "Add a profile picture and summary",
-    description: "Create a strong first impression with professional visuals and compelling text",
-    image: "/images/linkedin-step2.png",
-    details:
-      "Upload a professional headshot and write a compelling summary that tells your professional story. Your summary should highlight your skills, experience, and career goals in a conversational tone.",
-  },
-  {
-    id: 3,
-    title: "Add your education and experience",
-    description: "Build credibility with detailed work history and educational background",
-    image: "/images/linkedin-step3.png",
-    details:
-      "Add your current and past work experiences with detailed descriptions of your accomplishments. Include your education, certifications, and any relevant coursework that showcases your qualifications.",
-  },
-  {
-    id: 4,
-    title: "Make 10 meaningful connections daily",
-    description: "Build your network strategically with relevant professionals",
-    image: "/images/linkedin-step4.png",
-    details:
-      "Connect with classmates, colleagues, industry professionals, and people you meet at events. Always personalize connection requests with a brief message explaining how you know them or why you'd like to connect.",
-  },
-  {
-    id: 5,
-    title: "Follow people in your field",
-    description: "Stay updated with industry trends and thought leaders",
-    image: "/images/linkedin-step5.png",
-    details:
-      "Follow industry leaders, companies you're interested in, and influencers in your field. This helps you stay informed about trends, job opportunities, and valuable insights in your industry.",
-  },
-  {
-    id: 6,
-    title: "Share your GitHub or LeetCode profile as a post",
-    description: "Showcase your technical skills and projects to your network",
-    image: "/images/linkedin-step6.png",
-    details:
-      "Create a post sharing your GitHub profile or LeetCode achievements. Explain what projects you're working on or problems you've solved. This demonstrates your technical skills to potential employers and connections.",
-  },
-]
+import { linkedinOnboardingInformation } from "@/data/onboarding-information"
 
 export default function LinkedInHelpPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [currentStep, setCurrentStep] = useState(0)
   const [completedSteps, setCompletedSteps] = useState<number[]>([])
-
+  const steps = linkedinOnboardingInformation
+  
   // Get the step parameter from URL to know which onboarding step to return to
   const returnStep = searchParams.get("step") || "6"
 
