@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth/auth-client";
-import { updateOnboardingUserState } from "@/lib/onboarding-auth";
+import { updateOnboardingUserState } from "@/lib/onboarding/onboarding-auth";
 import { useOnboardingValidation } from "./use-onboarding-validation";
 import type { OnboardingFormData } from "@/types/client/onboarding/onboarding";
-import type { StepId } from "@/lib/onboarding-steps";
-import { ONBOARDING_STEPS_METADATA } from "@/lib/onboarding-steps";
+import type { StepId } from "@/lib/onboarding/onboarding-steps";
+import { ONBOARDING_STEPS_METADATA } from "@/lib/onboarding/onboarding-steps";
 const TOTAL_STEPS = 7;
 
 export interface SessionUserFields {
