@@ -38,7 +38,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { HomeFeed } from "@/components/home-feed";
-import { useSession } from "next-auth/react";
+import { authClient } from "@/lib/auth/auth-client";
 import { Pie, Label } from "recharts";
 import {
   ChartConfig,
@@ -54,15 +54,11 @@ export default function Homepage() {
   const [studyStreak, setStudyStreak] = useState(12);
   const [problemsSolved, setProblemsSolved] = useState(247);
   const [currentRank, setCurrentRank] = useState(1847);
-  const { data: session, status } = useSession();
-
-  // Mock user data instead of using useSession
-  const mockUser = {
-    login: session?.user.login,
-    name: session?.user.name,
-    email: session?.user.email,
-    image: session?.user.image,
-  };
+  const { data: session, isPending } = authClient.useSession();
+  const user = session?.user;
+  const githubUsername = user?.username ?? "";
+  const displayName = user?.name ?? "";
+  const avatarUrl = user?.image ?? "";
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -217,18 +213,18 @@ export default function Homepage() {
                 <div className="flex flex-col items-center mb-6">
                   <Avatar className="h-24 w-24 mb-3">
                     <AvatarImage
-                      src={mockUser.image || "/placeholder.svg"}
-                      alt={mockUser.name}
+                      src={avatarUrl || "/placeholder.svg"}
+                      alt={displayName}
                     />
                     <AvatarFallback className="bg-secondary text-secondary-foreground text-lg">
-                      {mockUser.name?.charAt(0).toUpperCase()}
+                      {displayName?.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <h2 className="text-lg font-semibold text-foreground">
-                    {mockUser.name}
+                    {displayName}
                   </h2>
                   <p className="text-sm text-muted-foreground">
-                    @<a className="border-b-2" href={`https://github.com/${mockUser.login}`}>{mockUser.login}</a>
+                    @<a className="border-b-2" href={`https://github.com/${githubUsername}`}>{githubUsername}</a>
                   </p>
                 </div>
 
@@ -336,7 +332,7 @@ export default function Homepage() {
 
                   <div className="relative z-10">
                     <h1 className="text-3xl font-bold mb-2">
-                      Welcome back, {mockUser.login}! 👋
+                      Welcome back, {displayName}! 👋
                     </h1>
                     <p className="text-blue-100 mb-6">
                       Ready to level up your coding skills today?

@@ -1,12 +1,12 @@
 import { ContributionHeatmap } from "./contribution-heatmap"
 import { ProfileContainer } from "./profile/profile-container"
 
-export function StudentDashboard() {
+export function StudentDashboard( { username }: { username: string } ) {
   return (
     <div className="max-w-8xl mx-auto space-y-4">
       {/* Dashboard Grid */}
       <div className="space-y-4">
-        <ContributionHeatmap />
+        <ContributionHeatmap username={username} />
         <ProfileContainer />
       </div>
     </div>

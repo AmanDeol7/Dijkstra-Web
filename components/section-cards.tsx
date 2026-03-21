@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { authClient } from "@/lib/auth/auth-client";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import {
   Cell,
@@ -245,8 +245,8 @@ function getLeetcodeTotals(response: LeetCodeStatisticsResponse | undefined) {
 }
 
 export function SectionCards() {
-  const { data: session } = useSession();
-  const githubUsername = session?.user?.login ?? "";
+  const { data: session } = authClient.useSession();
+    const githubUsername = session?.user?.username ?? "";
 
   const { data: personalDetails } = useQuery(queryOptions({
     queryKey: ['personal-details', githubUsername],
