@@ -2,10 +2,10 @@
 
 import { useEffect } from "react";
 import { authClient } from "@/lib/auth/auth-client";
-import { checkOnboardingStatus } from "@/services/onboarding/OnboardingService";
 
 export default function SignUpPage() {
   const { data: session, isPending } = authClient.useSession();
+  const username = session?.user?.username ?? "";
 
   useEffect(() => {
     if (isPending) return;
@@ -16,35 +16,16 @@ export default function SignUpPage() {
       return;
     }
 
-    const username =
-      (session.user as any).github_user_name ||
-      (session.user as any).login ||
-      "";
-
     if (!username) {
       window.location.href = "/onboarding";
       return;
     }
 
-    (async () => {
-      try {
-        const status = await checkOnboardingStatus(username);
-
-        if (!status.user_id) {
-          // User does not exist in backend → fresh onboarding
-          window.location.href = "/onboarding";
-          return;
-        }
-
-        if (status.onboarded) {
-          window.location.href = "/dashboard";
-        } else {
-          window.location.href = "/onboarding";
-        }
-      } catch {
-        window.location.href = "/onboarding";
-      }
-    })();
+    if (session?.user?.completedOnboarding) {
+      window.location.href = "/dashboard";
+    } else {
+      window.location.href = "/onboarding";
+    }
   }, [session, isPending]);
 
   return null;
