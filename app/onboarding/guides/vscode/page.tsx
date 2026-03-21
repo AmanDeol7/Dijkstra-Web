@@ -20,56 +20,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import BackgroundPaths from "@/components/kokonutui/background-paths"
-
-const steps = [
-  {
-    id: 1,
-    title: "Download and install VS Code",
-    description: "Get the world's most popular code editor",
-    image: "/images/vscode-step1.png",
-    link: "https://code.visualstudio.com",
-    details:
-      "Visit code.visualstudio.com and download VS Code for your operating system. The installation is straightforward - just follow the setup wizard with default settings.",
-  },
-  {
-    id: 2,
-    title: "Install essential extensions",
-    description: "Supercharge your coding experience",
-    image: "/images/vscode-step2.png",
-    details:
-      "Open the Extensions view (Ctrl+Shift+X) and install key extensions like Python, Prettier, GitLens, and Live Server. These will dramatically improve your development workflow.",
-  },
-  {
-    id: 3,
-    title: "Configure basic settings",
-    description: "Customize VS Code to your preferences",
-    image: "/images/vscode-step3.png",
-    details:
-      "Access settings with Ctrl+, and configure auto-save, font size, theme, and other preferences. Set up auto-save to 'afterDelay' and choose a comfortable font size (14-16px recommended).",
-  },
-  {
-    id: 4,
-    title: "Learn keyboard shortcuts",
-    description: "Master the most important shortcuts",
-    image: "/images/vscode-step4.png",
-    details:
-      "Learn essential shortcuts like Ctrl+P (Quick Open), Ctrl+Shift+P (Command Palette), Ctrl+` (Terminal), and Ctrl+/ (Toggle Comment). These will make you much more efficient.",
-  },
-  {
-    id: 5,
-    title: "Set up integrated terminal",
-    description: "Use the built-in terminal effectively",
-    image: "/images/vscode-step5.png",
-    details:
-      "Open the integrated terminal with Ctrl+` and configure it to use your preferred shell. You can run Git commands, install packages, and execute scripts without leaving VS Code.",
-  },
-]
+import { vscodeOnboardingInformation } from "@/data/onboarding-information"
 
 function VSCodeHelpContent() {
   const searchParams = useSearchParams()
   const returnStep = searchParams.get("step") || "3"
   const [currentStep, setCurrentStep] = useState(0)
   const [completedSteps, setCompletedSteps] = useState<number[]>([])
+  const steps = vscodeOnboardingInformation
 
   const nextStep = () => {
     if (currentStep < steps.length - 1) {

@@ -20,7 +20,8 @@ export function useOnboardingValidation(
   formData: OnboardingFormData,
   currentStep: number
 ) {
-  const { githubConnected, linkedinConnected } = useOAuthAccounts();
+  const { githubConnected, linkedinConnected, discordConnected } =
+    useOAuthAccounts();
 
   const validation = useMemo(() => {
     const errors: Record<number, string[]> = {};
@@ -44,10 +45,10 @@ export function useOnboardingValidation(
       errors[3] = ["Please indicate if you are familiar with CLI"];
     }
 
-    // Step 4: Discord
-    isValid[4] = formData.discordJoined !== null;
+    // Step 4: Discord (OAuth link — same pattern as LinkedIn step 5)
+    isValid[4] = discordConnected;
     if (!isValid[4]) {
-      errors[4] = ["Please indicate if you have joined Discord"];
+      errors[4] = ["Discord account must be linked"];
     }
 
     // Step 5: LinkedIn
@@ -108,7 +109,7 @@ export function useOnboardingValidation(
     }
 
     return { isValid, errors };
-  }, [formData, githubConnected, linkedinConnected]);
+  }, [formData, githubConnected, linkedinConnected, discordConnected]);
 
   const canProceed = validation.isValid[currentStep] ?? false;
   const errors = validation.errors[currentStep] ?? [];

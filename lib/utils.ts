@@ -30,3 +30,20 @@ export function getYearRange(year: number) {
       endDate: end.toISOString().slice(0, 10),
     }
 }
+
+// Helper function to format months into years and months
+export const formatTimeDisplay = (months: number): string => {
+  if (months < 12) {
+    return `${months} month${months !== 1 ? 's' : ''}`;
+  }
+  
+  const years = Math.floor(months / 12);
+  const remainingMonths = months % 12;
+  
+  if (remainingMonths === 0) {
+    return `${years} year${years !== 1 ? 's' : ''}`;
+  }
+  
+  return `${years} year${years !== 1 ? 's' : ''}, ${remainingMonths} month${remainingMonths !== 1 ? 's' : ''}`;
+};
+

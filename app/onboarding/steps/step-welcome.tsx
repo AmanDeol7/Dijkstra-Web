@@ -5,8 +5,7 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { Github } from "lucide-react";
 import { IconBrandDiscord, IconBrandLinkedin } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
-import { CustomIcon } from "./shared-components";
-
+import { CustomIcon } from "@/components/custom-icon";
 interface WelcomeStepProps {
   onGetStarted: () => void;
 }
@@ -135,7 +134,7 @@ export function WelcomeStep({ onGetStarted }: WelcomeStepProps) {
                       initial={{ scaleX: 0, opacity: 0 }}
                       animate={{ scaleX: 1, opacity: 1 }}
                       transition={{ delay: 0.9 + index * 0.1, duration: 0.4 }}
-                      className="w-6 h-0.5 mx-3 bg-gradient-to-r from-border to-muted-foreground/30 backdrop-blur-sm"
+                      className="w-6 h-0.5 mx-3 bg-linear-to-r from-border to-muted-foreground/30 backdrop-blur-sm"
                     />
                   )}
                 </div>
@@ -183,7 +182,7 @@ export function WelcomeStep({ onGetStarted }: WelcomeStepProps) {
           className="text-center"
         >
           <p className="text-xs text-muted-foreground/60 max-w-sm mx-auto">
-            ✨ Interactive tutorials • Step-by-step guidance • Beginner-friendly
+            Built for Students, By Students
           </p>
         </motion.div>
       </div>
