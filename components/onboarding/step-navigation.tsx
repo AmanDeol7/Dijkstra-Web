@@ -31,7 +31,7 @@ export function StepNavigation({
         Back
       </Button>
 
-      <div className="flex flex-col items-center gap-2 order-first sm:order-none">
+      <div className="flex flex-col items-center gap-2 order-first sm:order-0">
         <div className="text-sm font-medium text-gray-600 dark:text-gray-400">
           Step {currentStep} of {totalSteps}
         </div>

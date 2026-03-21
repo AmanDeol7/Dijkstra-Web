@@ -205,7 +205,7 @@ export default function Homepage() {
           {/* Left sidebar */}
           <div className="col-span-12 md:col-span-3 lg:col-span-2">
             <Card
-              className="@container/card bg-gradient-to-t from-primary/5 to-card dark:bg-card shadow-xs"
+              className="@container/card bg-linear-to-t from-primary/5 to-card dark:bg-card shadow-xs"
               data-slot="card"
             >
               <CardContent className="p-4">
@@ -323,7 +323,7 @@ export default function Homepage() {
             <div className="grid gap-6">
               {/* Hero section */}
               <Card
-                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0 overflow-hidden"
+                className="bg-linear-to-r from-blue-600 to-purple-600 text-white border-0 overflow-hidden"
                 data-slot="card"
               >
                 <CardContent className="p-8 relative">
@@ -385,7 +385,7 @@ export default function Homepage() {
 
               {/* Learning paths and practice */}
               <Card
-                className="bg-gradient-to-t from-primary/5 to-card dark:bg-card shadow-xs"
+                className="bg-linear-to-t from-primary/5 to-card dark:bg-card shadow-xs"
                 data-slot="card"
               >
                 <CardHeader>
@@ -539,7 +539,7 @@ export default function Homepage() {
               {/* Recent activity and achievements */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Card
-                  className="bg-gradient-to-t from-primary/5 to-card dark:bg-card shadow-xs"
+                  className="bg-linear-to-t from-primary/5 to-card dark:bg-card shadow-xs"
                   data-slot="card"
                 >
                   <CardHeader>
@@ -583,7 +583,7 @@ export default function Homepage() {
                 </Card>
 
                 <Card
-                  className="bg-gradient-to-t from-primary/5 to-card dark:bg-card shadow-xs"
+                  className="bg-linear-to-t from-primary/5 to-card dark:bg-card shadow-xs"
                   data-slot="card"
                 >
                   <CardHeader>
@@ -637,7 +637,7 @@ export default function Homepage() {
             <div className="grid gap-6">
               {/* Daily challenge */}
               <Card
-                className="bg-gradient-to-br from-orange-500 to-yellow-500 text-white border-0"
+                className="bg-linear-to-br from-orange-500 to-yellow-500 text-white border-0"
                 data-slot="card"
               >
                 <CardContent className="p-6">
@@ -667,7 +667,7 @@ export default function Homepage() {
 
               {/* Study schedule */}
               <Card
-                className="bg-gradient-to-t from-primary/5 to-card dark:bg-card shadow-xs"
+                className="bg-linear-to-t from-primary/5 to-card dark:bg-card shadow-xs"
                 data-slot="card"
               >
                 <CardHeader>
@@ -706,7 +706,7 @@ export default function Homepage() {
 
               {/* Leaderboard */}
               <Card
-                className="bg-gradient-to-t from-primary/5 to-card dark:bg-card shadow-xs"
+                className="bg-linear-to-t from-primary/5 to-card dark:bg-card shadow-xs"
                 data-slot="card"
               >
                 <CardHeader>
@@ -751,7 +751,7 @@ export default function Homepage() {
 
               {/* Quick actions */}
               <Card
-                className="bg-gradient-to-t from-primary/5 to-card dark:bg-card shadow-xs"
+                className="bg-linear-to-t from-primary/5 to-card dark:bg-card shadow-xs"
                 data-slot="card"
               >
                 <CardHeader>
@@ -881,7 +881,7 @@ function QuickStatCard({
 
   return (
     <Card
-      className="bg-gradient-to-t from-primary/5 to-card dark:bg-card shadow-xs"
+      className="bg-linear-to-t from-primary/5 to-card dark:bg-card shadow-xs"
       data-slot="card"
     >
       <CardContent className="p-4">

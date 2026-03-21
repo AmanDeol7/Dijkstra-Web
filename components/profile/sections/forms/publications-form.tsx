@@ -443,13 +443,13 @@ export function PublicationsForm({
                     <img
                       src={publication.publisherLogo}
                       alt={`${publication.publisher} logo`}
-                      className="w-16 h-16 rounded-lg object-contain border bg-white flex-shrink-0"
+                      className="w-16 h-16 rounded-lg object-contain border bg-white shrink-0"
                     />
                   ) : (
                     <img
                       src={`/abstract-geometric-shapes.png?key=kh3mj&height=48&width=48`}
                       alt={`${publication.publisher || 'publication'} logo`}
-                      className="w-16 h-16 rounded-lg object-cover border flex-shrink-0"
+                      className="w-16 h-16 rounded-lg object-cover border shrink-0"
                     />
                   )}
                   <div className="flex-1 min-w-0">
@@ -465,7 +465,7 @@ export function PublicationsForm({
                     </p>
                   </div>
                 </div>
-                <div className="flex gap-2 flex-shrink-0">
+                <div className="flex gap-2 shrink-0">
                   <Button
                     size="sm"
                     variant="outline"

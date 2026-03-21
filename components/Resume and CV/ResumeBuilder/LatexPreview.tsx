@@ -652,7 +652,7 @@ export default function LatexPreview({ data, template = 'deedy', scale = 1 }: La
       <div className="flex-1 overflow-hidden">
         {showLatex ? (
           <div className="h-full flex flex-col">
-            <div className="flex justify-between items-center mb-2 flex-shrink-0">
+            <div className="flex justify-between items-center mb-2 shrink-0">
               <h3 className="text-sm font-semibold text-gray-700">Generated LaTeX Code</h3>
               <button
                 onClick={async () => {
@@ -679,7 +679,7 @@ export default function LatexPreview({ data, template = 'deedy', scale = 1 }: La
           </div>
         ) : (
           <div className="h-full flex flex-col">
-            <h3 className="text-sm font-semibold text-gray-700 mb-2 flex-shrink-0">Resume Preview</h3>
+            <h3 className="text-sm font-semibold text-gray-700 mb-2 shrink-0">Resume Preview</h3>
             <div className="flex-1 overflow-auto bg-white border rounded-lg">
               <div className="origin-top-left" style={{ transformOrigin: 'top left' }} ref={previewRef}>
                 {renderHTMLPreview()}

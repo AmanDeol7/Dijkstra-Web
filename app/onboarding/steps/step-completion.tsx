@@ -119,7 +119,7 @@ export function CompletionStep() {
                 transition={{ delay: 1 + index * 0.1, duration: 0.4 }}
                 className="flex items-center gap-3 p-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg"
               >
-                <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0"></div>
+                <div className="w-2 h-2 bg-primary rounded-full shrink-0"></div>
                 <span className="text-muted-foreground">{item}</span>
               </motion.div>
             ))}

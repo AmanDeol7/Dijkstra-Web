@@ -246,7 +246,7 @@ export function ProfileData() {
 
           {/* Goal Column - Primary Specialization */}
           <div className="flex flex-col items-center justify-center p-3 bg-muted/30 rounded-lg min-h-[180px]">
-            <div className={`w-28 h-36 p-3 rounded-xl border-2 bg-gradient-to-br ${path.gradient} border-white/20 shadow-xl backdrop-blur-sm`}>
+            <div className={`w-28 h-36 p-3 rounded-xl border-2 bg-linear-to-br ${path.gradient} border-white/20 shadow-xl backdrop-blur-sm`}>
               <div className="text-center h-full flex flex-col justify-between">
                 <div>
                   <div className={`w-10 h-10 mx-auto mb-2 rounded-xl bg-white/30 backdrop-blur-sm border border-white/30 flex items-center justify-center p-1.5 shadow-lg`}>
@@ -267,7 +267,7 @@ export function ProfileData() {
                       }}
                     />
                   </div>
-                  <h4 className="text-[10px] font-medium text-white drop-shadow-sm leading-tight px-1 break-words">{path.label}</h4>
+                  <h4 className="text-[10px] font-medium text-white drop-shadow-sm leading-tight px-1 wrap-break-word">{path.label}</h4>
                 </div>
                 
                 {/* Primary Badge */}

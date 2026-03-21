@@ -349,7 +349,7 @@ const Resume = ({
   }
 
   return (
-    <div className="min-h-screenfont-inter relative bg-gradient-to-b from-background to-muted/30 text-card-foreground transition-colors duration-300">
+    <div className="min-h-screenfont-inter relative bg-linear-to-b from-background to-muted/30 text-card-foreground transition-colors duration-300">
       <div className="relative z-10 py-4 px-2">
         <ResourceSection
           title="Resumes & CV Templates"

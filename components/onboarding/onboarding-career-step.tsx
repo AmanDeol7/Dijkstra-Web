@@ -214,7 +214,7 @@ export function OnboardingCareerStep(props: CareerStepProps) {
                     className={`flex items-center gap-2 pb-2 border-b border-white/20`}
                   >
                     <div
-                      className={`w-1 h-6 rounded-full bg-gradient-to-b ${factionGradient}`}
+                      className={`w-1 h-6 rounded-full bg-linear-to-b ${factionGradient}`}
                     ></div>
                     <h4 className="text-base font-semibold text-foreground">
                       {faction}
@@ -265,7 +265,7 @@ export function OnboardingCareerStep(props: CareerStepProps) {
                         >
                           <div className="text-center">
                             <div
-                              className={`w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-2 rounded-xl bg-gradient-to-br ${path.gradient} flex items-center justify-center p-2 shadow-lg`}
+                              className={`w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-2 rounded-xl bg-linear-to-br ${path.gradient} flex items-center justify-center p-2 shadow-lg`}
                             >
                               <img
                                 src={`/${path.icon}`}
@@ -322,7 +322,7 @@ export function OnboardingCareerStep(props: CareerStepProps) {
           {/* Instructions */}
           <div className="mt-6 p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
             <div className="flex items-start gap-3">
-              <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center shrink-0 mt-0.5">
                 <span className="text-white text-xs font-bold">1</span>
               </div>
               <div>
@@ -339,7 +339,7 @@ export function OnboardingCareerStep(props: CareerStepProps) {
 
             {localPrimarySpec && (
               <div className="flex items-start gap-3 mt-3">
-                <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center shrink-0 mt-0.5">
                   <span className="text-white text-xs font-bold">2</span>
                 </div>
                 <div>

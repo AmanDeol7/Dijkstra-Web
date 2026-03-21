@@ -200,7 +200,7 @@ export function OnboardingFlowBody({
             <motion.div
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-gray-900 to-gray-700 shadow-2xl"
+              className="flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br from-gray-900 to-gray-700 shadow-2xl"
             >
               <Github className="h-8 w-8 text-white" />
             </motion.div>
@@ -252,7 +252,7 @@ export function OnboardingFlowBody({
           title="Git"
           description="Have you installed and configured Git on your machine?"
           icon={
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-2xl">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br from-orange-500 to-orange-600 shadow-2xl">
               <CustomIcon iconType="git" className="h-8 w-8" />
             </div>
           }
@@ -290,7 +290,7 @@ export function OnboardingFlowBody({
           title="VS Code"
           description="Are you comfortable using VS Code and the terminal?"
           icon={
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-blue-700 shadow-2xl">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br from-blue-600 to-blue-700 shadow-2xl">
               <CustomIcon iconType="vscode" className="h-8 w-8" />
             </div>
           }
@@ -333,7 +333,7 @@ export function OnboardingFlowBody({
           title="Discord"
           description="Link Discord so you can join the community with the same account."
           icon={
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-600 shadow-2xl">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br from-indigo-600 to-purple-600 shadow-2xl">
               <IconBrandDiscord className="h-8 w-8 text-white" />
             </div>
           }
@@ -377,7 +377,7 @@ export function OnboardingFlowBody({
           title="LinkedIn"
           description="Connect LinkedIn and add your public profile name (vanity URL)."
           icon={
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-700 to-blue-800 shadow-2xl">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br from-blue-700 to-blue-800 shadow-2xl">
               <IconBrandLinkedin className="h-8 w-8 text-white" />
             </div>
           }
@@ -430,7 +430,7 @@ export function OnboardingFlowBody({
           title="LeetCode"
           description="Enter the LeetCode username you use for practice."
           icon={
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-400 to-yellow-500 shadow-2xl">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br from-orange-400 to-yellow-500 shadow-2xl">
               <CustomIcon iconType="leetcode" className="h-8 w-8" />
             </div>
           }
@@ -482,7 +482,7 @@ export function OnboardingFlowBody({
           title="General info"
           description="Career focus, timeline, and tools—we use this to tailor your path."
           icon={
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 shadow-2xl">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br from-purple-500 to-pink-500 shadow-2xl">
               <CustomIcon iconType="career" className="h-8 w-8" />
             </div>
           }

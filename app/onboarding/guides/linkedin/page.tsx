@@ -75,7 +75,7 @@ export default function LinkedInHelpPage() {
           className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-2xl"
         >
           <div className="flex items-center gap-4 mb-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-700 to-blue-800 rounded-xl flex items-center justify-center shadow-lg">
+            <div className="w-12 h-12 bg-linear-to-br from-blue-700 to-blue-800 rounded-xl flex items-center justify-center shadow-lg">
               <Linkedin className="w-6 h-6 text-white" />
             </div>
             <div>
@@ -311,7 +311,7 @@ export default function LinkedInHelpPage() {
                     },
                   ].map((item, index) => (
                     <div key={index} className="flex items-start space-x-4 p-4 bg-white/5 rounded-lg">
-                      <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white text-sm font-medium flex-shrink-0">
+                      <div className="w-8 h-8 bg-linear-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white text-sm font-medium shrink-0">
                         {index + 1}
                       </div>
                       <div className="flex-1 space-y-2">
@@ -466,7 +466,7 @@ export default function LinkedInHelpPage() {
           </Card>
 
           {/* Next Steps */}
-          <Card className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 border border-white/20">
+          <Card className="bg-linear-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 border border-white/20">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Linkedin className="w-5 h-5 text-blue-500" />

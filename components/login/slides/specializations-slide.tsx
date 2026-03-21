@@ -27,10 +27,10 @@ export function SpecializationsSlide() {
                     className="relative group p-4 rounded-xl border border-white/10 hover:border-white/30 transition-all duration-300 hover:scale-105 overflow-hidden"
                   >
                     {/* Background gradient layer */}
-                    <div className={`absolute inset-0 bg-gradient-to-br ${path.gradient} opacity-30 group-hover:opacity-40 transition-opacity duration-300`} />
+                    <div className={`absolute inset-0 bg-linear-to-br ${path.gradient} opacity-30 group-hover:opacity-40 transition-opacity duration-300`} />
                     {/* Content layer */}
                     <div className="relative z-10">
-                      <div className={`w-12 h-12 mx-auto mb-3 rounded-xl bg-gradient-to-br ${path.gradient} flex items-center justify-center p-2 shadow-lg`}>
+                      <div className={`w-12 h-12 mx-auto mb-3 rounded-xl bg-linear-to-br ${path.gradient} flex items-center justify-center p-2 shadow-lg`}>
                         <img 
                           src={`/${path.icon}`} 
                           alt={path.label}

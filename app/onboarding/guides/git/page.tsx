@@ -75,7 +75,7 @@ function GitHelpContent() {
           className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-2xl"
         >
           <div className="flex items-center gap-4 mb-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg">
+            <div className="w-12 h-12 bg-linear-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg">
               <GitBranch className="w-6 h-6 text-white" />
             </div>
             <div>
@@ -283,7 +283,7 @@ function GitHelpContent() {
                 </h3>
                 <div className="space-y-3 pl-4">
                   <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-medium flex-shrink-0 mt-0.5">
+                    <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-medium shrink-0 mt-0.5">
                       1
                     </div>
                     <p className="text-gray-600 dark:text-gray-300">
@@ -299,13 +299,13 @@ function GitHelpContent() {
                     </p>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-medium flex-shrink-0 mt-0.5">
+                    <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-medium shrink-0 mt-0.5">
                       2
                     </div>
                     <p className="text-gray-600 dark:text-gray-300">Run the installer and follow the setup wizard</p>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-medium flex-shrink-0 mt-0.5">
+                    <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-medium shrink-0 mt-0.5">
                       3
                     </div>
                     <p className="text-gray-600 dark:text-gray-300">
@@ -322,7 +322,7 @@ function GitHelpContent() {
                 </h3>
                 <div className="space-y-3 pl-4">
                   <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-gray-600 rounded-full flex items-center justify-center text-white text-xs font-medium flex-shrink-0 mt-0.5">
+                    <div className="w-6 h-6 bg-gray-600 rounded-full flex items-center justify-center text-white text-xs font-medium shrink-0 mt-0.5">
                       1
                     </div>
                     <p className="text-gray-600 dark:text-gray-300">
@@ -331,7 +331,7 @@ function GitHelpContent() {
                     </p>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-gray-600 rounded-full flex items-center justify-center text-white text-xs font-medium flex-shrink-0 mt-0.5">
+                    <div className="w-6 h-6 bg-gray-600 rounded-full flex items-center justify-center text-white text-xs font-medium shrink-0 mt-0.5">
                       2
                     </div>
                     <p className="text-gray-600 dark:text-gray-300">
@@ -339,7 +339,7 @@ function GitHelpContent() {
                     </p>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-gray-600 rounded-full flex items-center justify-center text-white text-xs font-medium flex-shrink-0 mt-0.5">
+                    <div className="w-6 h-6 bg-gray-600 rounded-full flex items-center justify-center text-white text-xs font-medium shrink-0 mt-0.5">
                       3
                     </div>
                     <p className="text-gray-600 dark:text-gray-300">
@@ -364,7 +364,7 @@ function GitHelpContent() {
                 </h3>
                 <div className="space-y-3 pl-4">
                   <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center text-white text-xs font-medium flex-shrink-0 mt-0.5">
+                    <div className="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center text-white text-xs font-medium shrink-0 mt-0.5">
                       1
                     </div>
                     <p className="text-gray-600 dark:text-gray-300">
@@ -373,7 +373,7 @@ function GitHelpContent() {
                     </p>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center text-white text-xs font-medium flex-shrink-0 mt-0.5">
+                    <div className="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center text-white text-xs font-medium shrink-0 mt-0.5">
                       2
                     </div>
                     <p className="text-gray-600 dark:text-gray-300">
@@ -382,7 +382,7 @@ function GitHelpContent() {
                     </p>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center text-white text-xs font-medium flex-shrink-0 mt-0.5">
+                    <div className="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center text-white text-xs font-medium shrink-0 mt-0.5">
                       3
                     </div>
                     <p className="text-gray-600 dark:text-gray-300">
@@ -466,7 +466,7 @@ function GitHelpContent() {
           </Card>
 
           {/* Next Steps */}
-          <Card className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 border border-white/20">
+          <Card className="bg-linear-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 border border-white/20">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <CheckCircle className="w-5 h-5 text-green-500" />
