@@ -6,6 +6,7 @@ export interface OnboardingStatusInputDTO {
 export interface OnboardingStepUpdateInputDTO {
   username: string;
   step: number;
+  completedOnboarding: boolean;
 }
 
 export interface OnboardingStatusOutputDTO {

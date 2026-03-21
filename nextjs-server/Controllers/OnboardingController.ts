@@ -4,7 +4,6 @@ import {
   updateOnboardingStep,
 } from "@/nextjs-server/Services/Onboarding/OnboardingService";
 import type {
-  OnboardingStatusInputDTO,
   OnboardingStatusOutputDTO,
   OnboardingStepUpdateInputDTO,
   OnboardingSubmitInputDTO,
@@ -15,9 +14,15 @@ import { updateUserOnboardingByUsername } from "../Repository/OnboardingReposito
 
 export async function getOnboardingStatusController(request: NextRequest) {
   try {
-    const input: OnboardingStatusInputDTO = await request.json();
+    const username = request.nextUrl.searchParams.get("username")?.trim();
+    if (!username) {
+      return NextResponse.json(
+        { message: "Missing username query parameter" },
+        { status: 400 }
+      );
+    }
     const data: OnboardingStatusOutputDTO = await checkOnboardingStatus(
-      input.username
+      username
     );
     return NextResponse.json(data, { status: 200 });
   } catch (error) {
@@ -38,7 +43,8 @@ export async function updateOnboardingStepController(request: NextRequest) {
     const input: OnboardingStepUpdateInputDTO = await request.json();
     const data: OnboardingStatusOutputDTO = await updateOnboardingStep(
       input.username,
-      input.step
+      input.step,
+      input.completedOnboarding
     );
     return NextResponse.json(data, { status: 200 });
   } catch (error) {

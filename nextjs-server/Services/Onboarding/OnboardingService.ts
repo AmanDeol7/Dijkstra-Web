@@ -1,7 +1,6 @@
 import { getUserOnboardingByUsername } from "@/nextjs-server/Repository/OnboardingRepository";
 import { updateUserOnboardingByUsername } from "@/nextjs-server/Repository/OnboardingRepository";
 import { OnboardingStatusOutputDTO } from "@/types/client/onboarding/api";
-import type { OnboardingFormData } from "@/types/client/onboarding/onboarding";
 
 /**
  * Check onboarding status for a username
@@ -25,13 +24,14 @@ export async function checkOnboardingStatus(
  */
 export async function updateOnboardingStep(
   username: string,
-  step: number
+  step: number,
+  completedOnboarding: boolean
 ): Promise<OnboardingStatusOutputDTO> {
   try {
     const user = await updateUserOnboardingByUsername({
       username: username,
       onboardingStep: step,
-      completedOnboarding: step >= 7 ? true : false,
+      completedOnboarding: completedOnboarding,
     });
 
     if (!user) {
