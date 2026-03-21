@@ -58,7 +58,6 @@ export const auth = betterAuth({
     linkedin: {
       clientId: requireEnv("LINKEDIN_CLIENT_ID"),
       clientSecret: requireEnv("LINKEDIN_CLIENT_SECRET"),
-      scope: ["r_liteprofile", "r_basicprofile"],
     },
     discord: {
       clientId: requireEnv("DISCORD_CLIENT_ID"),
