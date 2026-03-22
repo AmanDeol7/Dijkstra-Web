@@ -3,18 +3,18 @@
 import type { ReactNode } from "react";
 import { StepIndicator } from "@/components/onboarding/step-indicator";
 import type { StepId } from "@/lib/onboarding/onboarding-steps";
+import { cn } from "@/lib/utils";
 
 interface OnboardingStepTemplateProps {
   currentStep: number;
   completedSteps: StepId[];
-  /** Main heading under the icon */
-  title: string;
-  description: string;
-  /** Icon / illustration (centered) */
-  icon: ReactNode;
+  title?: string;
+  description?: string;
+  icon?: ReactNode;
   children: ReactNode;
-  /** e.g. NewToConceptLink, VsCodeDownloadLink */
   afterContent?: ReactNode;
+  contentClassName?: string;
+  hideHeader?: boolean;
 }
 
 /**
@@ -29,6 +29,8 @@ export function OnboardingStepTemplate({
   icon,
   children,
   afterContent,
+  contentClassName,
+  hideHeader,
 }: OnboardingStepTemplateProps) {
   return (
     <div className="flex w-full flex-col">
@@ -38,15 +40,27 @@ export function OnboardingStepTemplate({
         interactive={false}
       />
 
-      <div className="space-y-4 pt-4 text-center">
-        <div className="mx-auto flex justify-center">{icon}</div>
-        <h2 className="text-xl font-bold text-foreground sm:text-2xl">{title}</h2>
-        <p className="mx-auto max-w-md px-4 text-sm text-muted-foreground sm:text-base">
-          {description}
-        </p>
-      </div>
+      {!hideHeader ? (
+        <div className="space-y-4 pt-4 text-center">
+          <div className="mx-auto flex justify-center">{icon}</div>
+          <h2 className="text-xl font-bold text-foreground sm:text-2xl">
+            {title}
+          </h2>
+          <p className="mx-auto max-w-md px-4 text-sm text-muted-foreground sm:text-base">
+            {description}
+          </p>
+        </div>
+      ) : null}
 
-      <div className="mx-auto w-full max-w-lg flex-1 py-6">{children}</div>
+      <div
+        className={cn(
+          "mx-auto w-full flex-1",
+          hideHeader ? "pt-4 pb-6" : "py-6",
+          contentClassName ?? "max-w-lg"
+        )}
+      >
+        {children}
+      </div>
 
       {afterContent ? <div className="pb-2">{afterContent}</div> : null}
     </div>

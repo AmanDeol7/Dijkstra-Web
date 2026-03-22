@@ -33,16 +33,24 @@ export function useOnboardingValidation(
       errors[1] = ["GitHub account must be connected"];
     }
 
-    // Step 2: Git
-    isValid[2] = formData.gitSetup !== null;
+    // Step 2: Git — must confirm setup (Yes)
+    isValid[2] = formData.gitSetup === true;
     if (!isValid[2]) {
-      errors[2] = ["Please indicate if you have set up Git"];
+      errors[2] =
+        formData.gitSetup === false
+          ? ["Please set up Git using the guide below, then choose Yes to continue"]
+          : ["Please confirm you have set up Git (select Yes)"];
     }
 
-    // Step 3: VS Code
-    isValid[3] = formData.cliKnowledge !== null;
+    // Step 3: VS Code / CLI — must confirm familiarity (Yes)
+    isValid[3] = formData.cliKnowledge === true;
     if (!isValid[3]) {
-      errors[3] = ["Please indicate if you are familiar with CLI"];
+      errors[3] =
+        formData.cliKnowledge === false
+          ? [
+              "Please review the VS Code guide below, then choose Yes when you are comfortable with the CLI",
+            ]
+          : ["Please confirm you are familiar with the CLI (select Yes)"];
     }
 
     // Step 4: Discord (OAuth link — same pattern as LinkedIn step 5)
@@ -77,7 +85,7 @@ export function useOnboardingValidation(
       formData.primarySpecialization !== "" &&
       formData.secondarySpecializations.length === 3 &&
       formData.timeToUpskill > 0 &&
-      formData.timeToUpskill <= 120 &&
+      formData.timeToUpskill <= 60 &&
       formData.expectedSalary !== "" &&
       formData.selectedTools.length > 0 &&
       formData.dreamCompany !== "" &&
@@ -91,8 +99,8 @@ export function useOnboardingValidation(
       if (formData.secondarySpecializations.length !== 3) {
         errors[7].push("Exactly 3 secondary specializations are required");
       }
-      if (formData.timeToUpskill <= 0 || formData.timeToUpskill > 120) {
-        errors[7].push("Time to upskill must be between 1 and 120 months");
+      if (formData.timeToUpskill <= 0 || formData.timeToUpskill > 60) {
+        errors[7].push("Time to upskill must be between 1 and 60 months (5 years)");
       }
       if (formData.expectedSalary === "") {
         errors[7].push("Expected salary range is required");

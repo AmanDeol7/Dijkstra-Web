@@ -137,15 +137,17 @@ function GitHelpContent() {
 
             <CardContent className="space-y-6">
               {/* Screenshot Area */}
-              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 flex justify-center">
-                <img
-                  src={currentStepData.image || "/placeholder.svg"}
-                  alt={currentStepData.title}
-                  className="w-full max-w-2xl h-64 object-cover rounded-lg shadow-lg border border-white/20"
-                  onError={(e) => {
-                    e.currentTarget.src = `/placeholder.svg?height=300&width=600&text=Git+Step+${currentStepData.id}+Screenshot`
-                  }}
-                />
+              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
+                <div className="flex h-[380px] w-full items-center justify-center overflow-hidden rounded-lg">
+                  <img
+                    src={currentStepData.image || "/placeholder.svg"}
+                    alt={currentStepData.title}
+                    className="max-h-full max-w-full object-contain rounded-lg shadow-lg border border-white/20"
+                    onError={(e) => {
+                      e.currentTarget.src = `/placeholder.svg?height=300&width=600&text=Git+Step+${currentStepData.id}+Screenshot`
+                    }}
+                  />
+                </div>
               </div>
 
               {/* Step Details */}

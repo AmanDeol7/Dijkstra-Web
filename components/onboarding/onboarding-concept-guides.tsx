@@ -39,7 +39,7 @@ const VS_CODE_DOWNLOAD = "https://code.visualstudio.com/download";
 export function VsCodeDownloadLink() {
   return (
     <div className="text-center">
-      <Button variant="outline" size="sm" className="bg-white/5 border-white/20" asChild>
+      <Button variant="default" size="sm" className="bg-blue-500 border-white/20 hover:bg-blue-600" asChild>
         <a href={VS_CODE_DOWNLOAD} target="_blank" rel="noopener noreferrer">
           <ExternalLink className="mr-2 size-4" />
           Download VS Code

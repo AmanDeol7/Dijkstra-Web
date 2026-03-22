@@ -25,7 +25,8 @@ export function useOnboardingNavigation(
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
 
-  const { canProceed } = useOnboardingValidation(formData, currentStep);
+  const { canProceed, errors: stepValidationErrors } =
+    useOnboardingValidation(formData, currentStep);
 
   const completedSteps = useMemo((): StepId[] => {
     return ONBOARDING_STEPS_METADATA.filter(
@@ -111,6 +112,7 @@ export function useOnboardingNavigation(
     currentStep,
     completedSteps,
     canProceed,
+    stepValidationErrors,
     totalSteps: TOTAL_STEPS,
     steps: ONBOARDING_STEPS_METADATA,
     currentStepConfig,

@@ -22,6 +22,7 @@ import {
 } from "@/components/onboarding/onboarding-concept-guides";
 import { CustomIcon } from "@/components/custom-icon";
 import { OnboardingCareerStep } from "@/components/onboarding/onboarding-career-step";
+import { cn } from "@/lib/utils";
 
 type UpdateForm = (updates: Partial<OnboardingFormData>) => void;
 interface OnboardingFlowBodyProps {
@@ -41,6 +42,16 @@ function isValidLeetCodeUsername(value: string): boolean {
   const normalized = value.trim();
   if (normalized.length === 0) return false;
   return /^[A-Za-z0-9_-]{3,20}$/.test(normalized);
+}
+
+/** Yes/No controls on the glass card: avoid `outline`’s bg-background (often invisible here); grey out the active choice. */
+function onboardingBinaryChoiceButtonClass(isSelected: boolean) {
+  return cn(
+    "flex-1 min-h-11 border shadow-none",
+    isSelected
+      ? "border-white/15 bg-white/[0.06] text-muted-foreground opacity-60 hover:opacity-80 hover:bg-white/[0.08]"
+      : "border-white/25 bg-white/10 text-foreground opacity-100 hover:bg-white/18"
+  );
 }
 
 export function OnboardingFlowBody({
@@ -262,17 +273,21 @@ export function OnboardingFlowBody({
             <p className="text-center font-medium text-foreground">
               Have you set up Git?
             </p>
-            <div className="flex flex-col gap-2 sm:flex-row">
+            <div className="flex flex-col gap-2 sm:flex-row" role="group" aria-label="Git setup">
               <Button
-                variant={formData.gitSetup === true ? "default" : "outline"}
-                className="flex-1 border-white/20 bg-white/10 hover:bg-white/20"
+                type="button"
+                variant="outline"
+                className={onboardingBinaryChoiceButtonClass(formData.gitSetup === true)}
+                aria-pressed={formData.gitSetup === true}
                 onClick={() => updateFormData({ gitSetup: true })}
               >
                 Yes
               </Button>
               <Button
-                variant={formData.gitSetup === false ? "default" : "outline"}
-                className="flex-1 border-white/20 bg-white/10 hover:bg-white/20"
+                type="button"
+                variant="outline"
+                className={onboardingBinaryChoiceButtonClass(formData.gitSetup === false)}
+                aria-pressed={formData.gitSetup === false}
                 onClick={() => updateFormData({ gitSetup: false })}
               >
                 No
@@ -305,17 +320,25 @@ export function OnboardingFlowBody({
             <p className="text-center font-medium text-foreground">
               Are you familiar with the CLI / integrated terminal?
             </p>
-            <div className="flex flex-col gap-2 sm:flex-row">
+            <div
+              className="flex flex-col gap-2 sm:flex-row"
+              role="group"
+              aria-label="CLI familiarity"
+            >
               <Button
-                variant={formData.cliKnowledge === true ? "default" : "outline"}
-                className="flex-1 border-white/20 bg-white/10 hover:bg-white/20"
+                type="button"
+                variant="outline"
+                className={onboardingBinaryChoiceButtonClass(formData.cliKnowledge === true)}
+                aria-pressed={formData.cliKnowledge === true}
                 onClick={() => updateFormData({ cliKnowledge: true })}
               >
                 Yes
               </Button>
               <Button
-                variant={formData.cliKnowledge === false ? "default" : "outline"}
-                className="flex-1 border-white/20 bg-white/10 hover:bg-white/20"
+                type="button"
+                variant="outline"
+                className={onboardingBinaryChoiceButtonClass(formData.cliKnowledge === false)}
+                aria-pressed={formData.cliKnowledge === false}
                 onClick={() => updateFormData({ cliKnowledge: false })}
               >
                 No
@@ -479,13 +502,8 @@ export function OnboardingFlowBody({
         <OnboardingStepTemplate
           currentStep={currentStep}
           completedSteps={completedSteps}
-          title="General info"
-          description="Career focus, timeline, and tools—we use this to tailor your path."
-          icon={
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br from-purple-500 to-pink-500 shadow-2xl">
-              <CustomIcon iconType="career" className="h-8 w-8" />
-            </div>
-          }
+          contentClassName="max-w-6xl"
+          hideHeader
         >
           <OnboardingCareerStep
             formData={formData}

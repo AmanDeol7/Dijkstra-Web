@@ -114,7 +114,7 @@ export function WelcomeStep({ onGetStarted }: WelcomeStepProps) {
                     className="flex flex-col items-center group cursor-pointer"
                   >
                     <div
-                      className={`w-10 h-10 rounded-full bg-gradient-to-br ${platform.color} flex items-center justify-center transition-all duration-300 group-hover:scale-110 shadow-lg backdrop-blur-sm border border-white/20`}
+                      className={`w-10 h-10 rounded-full bg-linear-to-br ${platform.color} flex items-center justify-center transition-all duration-300 group-hover:scale-110 shadow-lg backdrop-blur-sm border border-white/20`}
                     >
                       {Icon ? (
                         <Icon className="w-5 h-5 text-white" />

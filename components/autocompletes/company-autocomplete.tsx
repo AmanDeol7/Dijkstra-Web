@@ -23,9 +23,17 @@ interface CompanyAutoCompleteProps {
   value: string
   onChange: (company: CompanyData) => void
   selectedCompany?: CompanyData | null
+  triggerClassName?: string
+  contentClassName?: string
 }
 
-export function CompanyAutoComplete({ value, onChange, selectedCompany }: CompanyAutoCompleteProps) {
+export function CompanyAutoComplete({
+  value,
+  onChange,
+  selectedCompany,
+  triggerClassName,
+  contentClassName,
+}: CompanyAutoCompleteProps) {
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState(value||"")
   const [companies, setCompanies] = useState<Company[]>([])
@@ -68,7 +76,15 @@ export function CompanyAutoComplete({ value, onChange, selectedCompany }: Compan
 
     <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-            <Button variant="outline" role="combobox" aria-expanded={open} className="w-[300px] justify-between">
+            <Button
+              variant="outline"
+              role="combobox"
+              aria-expanded={open}
+              className={cn(
+                "h-11 w-full min-w-0 justify-between gap-2 px-3 text-left font-normal",
+                triggerClassName
+              )}
+            >
                 <div className="flex items-center gap-2">
                     {selectedCompany?.logo_url ? (
                         <img 
@@ -89,7 +105,13 @@ export function CompanyAutoComplete({ value, onChange, selectedCompany }: Compan
             </Button>
         </PopoverTrigger>
         
-        <PopoverContent className="w-[300px] p-0 bg-popover text-popover-foreground border">
+        <PopoverContent
+          className={cn(
+            "w-(--radix-popover-trigger-width) min-w-[280px] max-w-[min(100vw-2rem,420px)] p-0 border bg-popover text-popover-foreground",
+            contentClassName
+          )}
+          align="start"
+        >
             <Command className="bg-popover text-popover-foreground">
                 <CommandInput placeholder="Search company..." value={query} onValueChange={setQuery} className="text-foreground" />
                 <CommandList className="bg-popover text-popover-foreground">

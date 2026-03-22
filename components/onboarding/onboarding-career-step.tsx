@@ -1,31 +1,40 @@
 "use client";
 
-import { useState } from "react";
-import { Loader2, AlertCircle } from "lucide-react";
+import { useEffect, useMemo, useState, useCallback } from "react";
+import { Loader2, AlertCircle, Building2, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { MultiSelect } from "@/components/multiselect";
 import { CompanyAutoComplete } from "@/components/autocompletes/company-autocomplete";
 import { useMutation } from "@tanstack/react-query";
 import { authClient } from "@/lib/auth/auth-client";
 import { Domain, Tools, Rank } from "@/types/server/dataforge/enums";
 import { CAREER_PATHS } from "@/data/career-paths";
 import { TOOLS_OPTIONS } from "@/types/enum-constants";
-import { TIME_OPTIONS, SALARY_RANGES } from "@/types/enum-constants";
-import { formatTimeDisplay } from "@/lib/utils";
+import { formatTimeDisplay, cn } from "@/lib/utils";
 import type { OnboardingFormData } from "@/types/client/onboarding/onboarding";
 import { OnboardUserRequest } from "@/types/server/dataforge/User/user";
 import { submitDataforgeOnboarding } from "@/services/onboarding/OnboardingService";
 import { updateOnboardingUserState } from "@/lib/onboarding/onboarding-auth";
+import {
+  OnboardingInteractiveSection,
+  OnboardingPickerWell,
+  onboardingMeterFillClassName,
+  onboardingMeterTrackClassName,
+  onboardingPickerChipClassName,
+} from "@/components/onboarding/onboarding-interactive-section";
+import { TimeLeftYearMonthControls } from "@/components/onboarding/time-left-year-month-controls";
+import { OnboardingSalaryCircularPicker } from "@/components/onboarding/onboarding-salary-circular-picker";
+import {
+  MAX_UPSKILL_MONTHS,
+  UPSKILL_MONTH_MIN,
+  UPSKILL_PRESETS,
+  formatUpskillYearsSummary,
+  maxMonthForYear,
+  partsToTotalMonths,
+  totalMonthsToParts,
+} from "@/lib/onboarding/upskill-time-left";
 
 type CareerStepProps = {
   formData: OnboardingFormData;
@@ -42,9 +51,33 @@ export function OnboardingCareerStep(props: CareerStepProps) {
   const [localSecondarySpecs, setLocalSecondarySpecs] = useState(
     formData.secondarySpecializations
   );
-  const [localTimeToUpskill, setLocalTimeToUpskill] = useState(
-    formData.timeToUpskill
+  const initialUpskill = totalMonthsToParts(formData.timeToUpskill);
+  const [upsYears, setUpsYears] = useState(initialUpskill.years);
+  const [upsMonths, setUpsMonths] = useState(initialUpskill.months);
+  const [upskillTouched, setUpskillTouched] = useState(
+    formData.timeToUpskill > 0
   );
+
+  const localTimeToUpskill = useMemo(() => {
+    if (!upskillTouched && upsYears === 0 && upsMonths === 0) return 0;
+    return partsToTotalMonths(upsYears, upsMonths);
+  }, [upskillTouched, upsYears, upsMonths]);
+
+  useEffect(() => {
+    const maxM = maxMonthForYear(upsYears);
+    setUpsMonths((m) => Math.min(maxM, Math.max(UPSKILL_MONTH_MIN, m)));
+  }, [upsYears]);
+
+  const setYears = useCallback((y: number) => {
+    setUpskillTouched(true);
+    setUpsYears(y);
+  }, []);
+
+  const setMonths = useCallback((m: number) => {
+    setUpskillTouched(true);
+    setUpsMonths(m);
+  }, []);
+
   const [localExpectedSalary, setLocalExpectedSalary] = useState(
     formData.expectedSalary
   );
@@ -142,17 +175,80 @@ export function OnboardingCareerStep(props: CareerStepProps) {
     }
   };
 
+  const remainingFieldsComplete =
+    localTimeToUpskill > 0 &&
+    localTimeToUpskill <= MAX_UPSKILL_MONTHS &&
+    localExpectedSalary !== "" &&
+    localDreamCompany !== "" &&
+    localDreamRole !== "" &&
+    localSelectedTools.length > 0;
+
   return (
     <div className="max-h-[min(520px,55vh)] space-y-4 overflow-y-auto sm:space-y-6 sm:px-0">
-      <div className="mx-auto max-w-4xl space-y-4 sm:space-y-6">
+      <div className="mx-auto max-w-6xl space-y-4 sm:space-y-6">
         {/* Specializations */}
-        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4 sm:p-6 shadow-xl">
-          <h3 className="text-lg font-semibold mb-4 text-foreground">
+        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4 text-left sm:p-6 shadow-xl">
+          <h3 className="mb-4 text-lg font-semibold text-foreground">
             Career Specializations
           </h3>
           <p className="text-sm text-muted-foreground mb-6">
             Choose your primary specialization and 3 secondary areas of interest
           </p>
+
+          {/* Instructions — steps 1–3: green, grey, red (left-aligned) */}
+          <div className="mb-6 space-y-3 rounded-lg border border-white/10 bg-white/5 p-4 text-left">
+            <div className="flex items-start gap-3 rounded-md bg-emerald-500/15 p-3 ring-1 ring-emerald-500/25">
+              <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-600 shadow-sm ring-2 ring-emerald-400/40">
+                <span className="text-xs font-bold text-white">1</span>
+              </div>
+              <div className="min-w-0 flex-1 text-left">
+                <h4 className="mb-1 text-sm font-medium text-emerald-800 dark:text-emerald-300">
+                  Step 1: Choose Primary Specialization
+                </h4>
+                <p className="text-xs text-emerald-700 dark:text-emerald-400">
+                  {!localPrimarySpec
+                    ? "Click on any career path to set it as your primary specialization"
+                    : `${CAREER_PATHS[localPrimarySpec as keyof typeof CAREER_PATHS]?.label} is your primary specialization`}
+                </p>
+              </div>
+            </div>
+
+            {localPrimarySpec && (
+              <div className="flex items-start gap-3 rounded-md bg-slate-500/15 p-3 ring-1 ring-slate-400/30">
+                <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-slate-600 shadow-sm ring-2 ring-slate-400/35">
+                  <span className="text-xs font-bold text-white">2</span>
+                </div>
+                <div className="min-w-0 flex-1 text-left">
+                  <h4 className="mb-1 text-sm font-medium text-slate-800 dark:text-slate-200">
+                    Step 2: Choose 3 Secondary Specializations
+                  </h4>
+                  <p className="text-xs text-slate-700 dark:text-slate-400">
+                    {localSecondarySpecs.length === 0
+                      ? "Now select 3 additional areas of interest from the remaining options"
+                      : `Selected ${localSecondarySpecs.length}/3 secondary specializations`}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {localPrimarySpec && localSecondarySpecs.length === 3 && (
+              <div className="flex items-start gap-3 rounded-md bg-rose-500/15 p-3 ring-1 ring-rose-500/30">
+                <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-rose-600 shadow-sm ring-2 ring-rose-400/40">
+                  <span className="text-xs font-bold text-white">3</span>
+                </div>
+                <div className="min-w-0 flex-1 text-left">
+                  <h4 className="mb-1 text-sm font-medium text-rose-800 dark:text-rose-300">
+                    Step 3: Fill the remaining fields
+                  </h4>
+                  <p className="text-xs text-rose-700 dark:text-rose-400">
+                    {remainingFieldsComplete
+                      ? "Everything below is filled in—use Save Career Plan when you're ready to finish."
+                      : "Scroll down and complete time to upskill, expected salary, dream company, dream role, and tools to learn. Then tap Save Career Plan."}
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Selection Status */}
           <div className="mb-6 p-4 bg-white/5 rounded-lg border border-white/10">
@@ -318,168 +414,168 @@ export function OnboardingCareerStep(props: CareerStepProps) {
               );
             })}
           </div>
+        </div>
 
-          {/* Instructions */}
-          <div className="mt-6 p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-            <div className="flex items-start gap-3">
-              <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center shrink-0 mt-0.5">
-                <span className="text-white text-xs font-bold">1</span>
-              </div>
-              <div>
-                <h4 className="text-sm font-medium text-blue-600 mb-1">
-                  Step 1: Choose Primary Specialization
-                </h4>
-                <p className="text-xs text-blue-500/80">
-                  {!localPrimarySpec
-                    ? "Click on any career path to set it as your primary specialization"
-                    : `${CAREER_PATHS[localPrimarySpec as keyof typeof CAREER_PATHS]?.label} is your primary specialization`}
-                </p>
+        {/* Time to upskill & expected salary — shared glass design system */}
+        <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2">
+          <OnboardingInteractiveSection
+            title="Time to upskill"
+            description="How long until you plan to apply? Use the arrows to set years and months (up to five years total)."
+            bodyClassName="space-y-4"
+          >
+            <div>
+              <p className="mb-2 text-xs font-medium text-muted-foreground">
+                Quick presets
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {UPSKILL_PRESETS.map(({ months, label }) => {
+                  const active = localTimeToUpskill === months;
+                  return (
+                    <button
+                      key={months}
+                      type="button"
+                      onClick={() => {
+                        setUpskillTouched(true);
+                        const p = totalMonthsToParts(months);
+                        setUpsYears(p.years);
+                        setUpsMonths(p.months);
+                      }}
+                      className={onboardingPickerChipClassName(active)}
+                    >
+                      {label}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
-            {localPrimarySpec && (
-              <div className="flex items-start gap-3 mt-3">
-                <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center shrink-0 mt-0.5">
-                  <span className="text-white text-xs font-bold">2</span>
-                </div>
-                <div>
-                  <h4 className="text-sm font-medium text-green-600 mb-1">
-                    Step 2: Choose 3 Secondary Specializations
-                  </h4>
-                  <p className="text-xs text-green-500/80">
-                    {localSecondarySpecs.length === 0
-                      ? "Now select 3 additional areas of interest from the remaining options"
-                      : `Selected ${localSecondarySpecs.length}/3 secondary specializations`}
+            <OnboardingPickerWell className="p-4 sm:p-5">
+              <TimeLeftYearMonthControls
+                className="mb-4"
+                years={upsYears}
+                months={upsMonths}
+                onYearsChange={setYears}
+                onMonthsChange={setMonths}
+              />
+              {localTimeToUpskill > 0 ? (
+                <div className="mb-4 text-center">
+                  <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                    Your timeline
+                  </p>
+                  <p className="mt-1 text-sm font-semibold text-foreground">
+                    {formatTimeDisplay(localTimeToUpskill)}
+                  </p>
+                  <p className="mt-0.5 text-xs font-medium text-primary">
+                    ≈{" "}
+                    {formatUpskillYearsSummary(localTimeToUpskill)} until
+                    applications
                   </p>
                 </div>
+              ) : null}
+              <div className={cn(onboardingMeterTrackClassName, "mb-2")}>
+                <div
+                  className={onboardingMeterFillClassName}
+                  style={{
+                    width: `${Math.min(100, (localTimeToUpskill / MAX_UPSKILL_MONTHS) * 100)}%`,
+                  }}
+                />
               </div>
-            )}
-          </div>
+              <div className="flex items-center justify-between text-[11px] text-muted-foreground">
+                <span>0</span>
+                <span>60 months max</span>
+              </div>
+            </OnboardingPickerWell>
+
+            {localTimeToUpskill <= 0 ? (
+              <p className="text-center text-xs text-muted-foreground">
+                Choose at least{" "}
+                <span className="font-medium text-foreground">1 month</span>{" "}
+                total (presets or arrows).
+              </p>
+            ) : null}
+          </OnboardingInteractiveSection>
+
+          <OnboardingSalaryCircularPicker
+            value={localExpectedSalary}
+            onChange={setLocalExpectedSalary}
+          />
         </div>
 
-        {/* Time to Upskill and Expected Salary */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4 sm:p-6 shadow-xl">
-            <h3 className="text-lg font-semibold mb-4 text-foreground">
-              Time to Upskill
+        {/* Dream company & role */}
+        <div className="rounded-2xl border border-white/10 bg-white/5 p-5 shadow-xl backdrop-blur-xl sm:p-8">
+          <div className="mb-6 max-w-2xl">
+            <h3 className="text-lg font-semibold text-foreground">
+              Career destination
             </h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              How much time do you have until you start applying?
+            <p className="mt-1 text-sm text-muted-foreground">
+              The company and role you are preparing for — we use this to
+              personalize your path.
             </p>
-            <Select
-              value={
-                localTimeToUpskill > 0
-                  ? localTimeToUpskill.toString()
-                  : ""
-              }
-              onValueChange={(value) =>
-                setLocalTimeToUpskill(parseInt(value))
-              }
-            >
-              <SelectTrigger className="bg-white/10 border-white/20">
-                <SelectValue placeholder="Select timeframe from dropdown" />
-              </SelectTrigger>
-              <SelectContent>
-                {TIME_OPTIONS.map((time) => (
-                  <SelectItem key={time.value} value={time.value.toString()}>
-                    {time.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          </div>
 
-            {localTimeToUpskill > 0 && (
-              <div className="mt-3 p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span className="text-sm text-blue-600 font-medium">
-                    That's {formatTimeDisplay(localTimeToUpskill)}
-                  </span>
-                </div>
+          <div className="grid gap-8 md:grid-cols-2 md:gap-10">
+            <div className="flex min-w-0 flex-col gap-2">
+              <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/15 text-primary">
+                  <Building2 className="h-4 w-4" aria-hidden />
+                </span>
+                Dream company
               </div>
-            )}
-          </div>
-
-          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4 sm:p-6 shadow-xl">
-            <h3 className="text-lg font-semibold mb-4 text-foreground">
-              Expected Salary
-            </h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              What's your target salary range?
-            </p>
-            <Select
-              value={localExpectedSalary}
-              onValueChange={setLocalExpectedSalary}
-            >
-              <SelectTrigger className="bg-white/10 border-white/20">
-                <SelectValue placeholder="Select salary range" />
-              </SelectTrigger>
-              <SelectContent>
-                {SALARY_RANGES.map((salary) => (
-                  <SelectItem key={salary.value} value={salary.value}>
-                    {salary.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-
-        {/* Dream Company and Dream Role */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4 sm:p-6 shadow-xl">
-            <h3 className="text-lg font-semibold mb-4 text-foreground">
-              Dream Company
-            </h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Which company would you love to work for?
-            </p>
-            <CompanyAutoComplete
-              value={localDreamCompany}
-              onChange={(company) => {
-                setLocalDreamCompany(company.name);
-                setSelectedCompanyData(company);
-              }}
-              selectedCompany={selectedCompanyData}
-            />
-
-            {localDreamCompany && (
-              <div className="mt-3 p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-                <div className="flex items-center gap-3">
+              <p className="text-xs text-muted-foreground">
+                Search the directory or add your own name — then confirm below.
+              </p>
+              <CompanyAutoComplete
+                value={localDreamCompany}
+                onChange={(company) => {
+                  setLocalDreamCompany(company.name);
+                  setSelectedCompanyData(company);
+                }}
+                selectedCompany={selectedCompanyData}
+                triggerClassName="border-white/20 bg-white/10 hover:bg-white/15 hover:border-white/30"
+              />
+              {localDreamCompany ? (
+                <div className="mt-1 flex items-center gap-3 rounded-xl border border-white/10 bg-white/6 p-3">
                   {selectedCompanyData?.logo_url ? (
                     <img
                       src={selectedCompanyData.logo_url}
-                      alt={`${localDreamCompany} logo`}
-                      className="w-8 h-8 rounded-lg object-contain border bg-white"
+                      alt=""
+                      className="h-11 w-11 shrink-0 rounded-lg border border-white/10 bg-white object-contain p-1"
                     />
                   ) : (
-                    <img
-                      src={`/abstract-geometric-shapes.png?key=kh3mj&height=32&width=32&query=${encodeURIComponent(`${localDreamCompany} company logo`)}`}
-                      alt={`${localDreamCompany} logo`}
-                      className="w-8 h-8 rounded-lg object-contain border bg-white"
-                    />
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/10 text-sm font-bold text-foreground">
+                      {localDreamCompany.charAt(0).toUpperCase()}
+                    </div>
                   )}
-                  <span className="text-sm text-blue-600 font-medium">
-                    Selected: {localDreamCompany}
-                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-semibold text-foreground">
+                      {localDreamCompany}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Saved as your target employer
+                    </p>
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
+              ) : null}
+            </div>
 
-          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4 sm:p-6 shadow-xl">
-            <h3 className="text-lg font-semibold mb-4 text-foreground">
-              Dream Role
-            </h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              What's your ideal job title or position?
-            </p>
-            <Input
-              value={localDreamRole}
-              onChange={(e) => setLocalDreamRole(e.target.value)}
-              placeholder="e.g., Senior Software Engineer, Product Manager..."
-              className="bg-white/10 border-white/20"
-            />
+            <div className="flex min-w-0 flex-col gap-2">
+              <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/15 text-primary">
+                  <Briefcase className="h-4 w-4" aria-hidden />
+                </span>
+                Dream role
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Target title or level — specific beats vague for planning.
+              </p>
+              <Input
+                value={localDreamRole}
+                onChange={(e) => setLocalDreamRole(e.target.value)}
+                placeholder="e.g. Senior Backend Engineer, Staff ML Engineer"
+                className="h-11 border-white/20 bg-white/10 text-base placeholder:text-muted-foreground/70"
+                autoComplete="off"
+              />
+            </div>
           </div>
         </div>
 
@@ -489,16 +585,36 @@ export function OnboardingCareerStep(props: CareerStepProps) {
             Tools & Technologies
           </h3>
           <p className="text-sm text-muted-foreground mb-4">
-            Select the tools you'd like to upskill in (choose as many as you
-            want)
+            Tap everything you want to upskill in — all options are visible at
+            once.
           </p>
 
-          <MultiSelect
-            options={TOOLS_OPTIONS.map((tool) => tool.value)}
-            selected={localSelectedTools}
-            onChange={setLocalSelectedTools}
-            placeholder="Search and select tools..."
-          />
+          <div className="flex flex-wrap gap-2">
+            {TOOLS_OPTIONS.map((tool) => {
+              const on = localSelectedTools.includes(tool.value);
+              return (
+                <button
+                  key={tool.value}
+                  type="button"
+                  onClick={() => {
+                    setLocalSelectedTools((prev) =>
+                      on
+                        ? prev.filter((t) => t !== tool.value)
+                        : [...prev, tool.value]
+                    );
+                  }}
+                  className={cn(
+                    "rounded-lg border px-3 py-2 text-left text-sm font-medium transition-colors",
+                    on
+                      ? "border-primary bg-primary/15 text-foreground ring-1 ring-primary/40"
+                      : "border-white/15 bg-white/5 text-muted-foreground hover:border-white/30 hover:bg-white/10 hover:text-foreground"
+                  )}
+                >
+                  {tool.label}
+                </button>
+              );
+            })}
+          </div>
 
           <div className="mt-4 text-sm text-muted-foreground">
             Selected: {localSelectedTools.length} tools
@@ -529,7 +645,7 @@ export function OnboardingCareerStep(props: CareerStepProps) {
                 localPrimarySpec !== "" &&
                 localSecondarySpecs.length === 3 &&
                 localTimeToUpskill > 0 &&
-                localTimeToUpskill <= 120 &&
+                localTimeToUpskill <= MAX_UPSKILL_MONTHS &&
                 localExpectedSalary !== "" &&
                 localSelectedTools.length > 0 &&
                 localDreamCompany !== "" &&

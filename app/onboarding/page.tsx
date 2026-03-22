@@ -54,6 +54,7 @@ export default function Page() {
     prevStep,
     handleGetStarted,
     canProceed,
+    stepValidationErrors,
   } = useOnboardingNavigation(formData, sessionFields);
 
   useEffect(() => {
@@ -127,6 +128,7 @@ export default function Page() {
               currentStep={currentStep}
               totalSteps={totalSteps}
               canProceed={canProceed}
+              validationMessages={stepValidationErrors}
               onPrev={() => void prevStep()}
               onNext={() => void nextStep()}
               isLastStep={currentStep === totalSteps}

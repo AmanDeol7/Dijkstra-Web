@@ -72,7 +72,7 @@ export const ONBOARDING_STEPS_METADATA: StepMetadata[] = [
   {
     id: "career",
     stepNumber: 7,
-    title: "General Info",
+    title: "Career",
     icon: "career",
     color: "from-purple-500 to-pink-500",
   },
