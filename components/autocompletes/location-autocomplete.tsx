@@ -128,7 +128,7 @@ export function LocationAutoComplete({ value, onChange, selectedLocation }: Loca
                                     }} 
                                     className="flex items-center gap-2 hover:bg-accent"
                                 >
-                                    <MapPin className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+                                    <MapPin className="w-5 h-5 text-muted-foreground shrink-0" />
                                     <span className="flex-1 truncate">{formatLocationDisplay(location)}</span>
                                     <Check className={cn("ml-auto h-4 w-4", 
                                         selectedLocation?.city === location.city && 

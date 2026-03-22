@@ -832,7 +832,7 @@ export default function DijkstraGPT() {
   // PART B – LAYOUT / RETURN
   // ============================================
   return (
-    <div className="bg-gradient-to-br from-background via-background to-muted/20 flex flex-col w-full h-full">
+    <div className="bg-linear-to-br from-background via-background to-muted/20 flex flex-col w-full h-full">
       <div className="flex-1 flex min-h-0">
         {/* MAIN CHAT AREA */}
         <div
@@ -843,7 +843,7 @@ export default function DijkstraGPT() {
           {/* Hero / examples when this session has no messages yet */}
           {!hasMessages && !isLoading ? (
             <>
-              <div className="flex-shrink-0 text-center pt-4 pb-8">
+              <div className="shrink-0 text-center pt-4 pb-8">
                 <div className="flex flex-col items-center space-y-2 my-8">
                   <img src="/icon.png" alt="Dijkstra GPT logo" className="h-30 w-30" />
                   <h2 className="text-2xl font-semibold">Your Personal CS Prep Assistant</h2>
@@ -897,7 +897,7 @@ export default function DijkstraGPT() {
 
           {/* Input area: sticky when messages, centered when empty */}
           {hasMessages ? (
-            <div className="flex-shrink-0 sticky bottom-0 p-6 border-t border-border/50 bg-gradient-to-br from-black/2 via-black/2 to-black/2 backdrop-blur-sm z-10 transition-all duration-500 ease-in-out">
+            <div className="shrink-0 sticky bottom-0 p-6 border-t border-border/50 bg-linear-to-br from-black/2 via-black/2 to-black/2 backdrop-blur-sm z-10 transition-all duration-500 ease-in-out">
               <div className="w-full max-w-4xl mx-auto">{renderInputArea(false)}</div>
             </div>
           ) : (

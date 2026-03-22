@@ -127,7 +127,7 @@ export function InstitutionAutoComplete({ value, onChange, selectedInstitution }
                     <img 
                       src={institution.logo_url} 
                       alt={`${institution.name} logo`}
-                      className="w-5 h-5 object-contain flex-shrink-0"
+                      className="w-5 h-5 object-contain shrink-0"
                     />
                   ) : (
                     <div className="w-5 h-5 rounded bg-muted flex items-center justify-center text-[10px] font-semibold">

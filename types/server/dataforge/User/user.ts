@@ -47,17 +47,6 @@ export interface OnboardUserResponse {
   updated_at: string;
 }
 
-export interface CheckOnboardingStatusResponse {
-  onboarded: boolean;
-  user_id: string | null;
-}
-
-export interface GetAuthDataResponse {
-  user_id: string;
-  profile_id: string;
-  github_user_name: string;
-}
-
 export interface GetUserBasicResponse {
   id: string;
   github_user_name: string;

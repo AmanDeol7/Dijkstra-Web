@@ -23,7 +23,6 @@ import {
   FileDown,
   GraduationCap,
 } from "lucide-react";
-import { useSession } from "next-auth/react";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import {
   IconBrandLeetcode,
@@ -36,6 +35,7 @@ import { CAREER_PATHS, type CareerPathKey } from "@/data/career-paths";
 import { Badge } from "@/components/ui/badge";
 import { Domain, Rank } from "@/types/server/dataforge/enums";
 import { getSideCardDetailsByGithubUsername } from "@/services/user/UserService";
+import { authClient } from "@/lib/auth/auth-client";
 
 // Utility function to get rank image path
 const getRankImagePath = (rank: Rank): string => { 
@@ -88,14 +88,16 @@ const getRankColor = (rank: Rank): string => {
 };
 
 export function ProfileData() {
-  const { data: session, status } = useSession();
+  const { data: session } = authClient.useSession();
+  const user = (session?.user as any) || {};
+  const githubUsername = user.username ?? "";
 
   // Fetch user data from backend
   const { data: userData, isLoading, error } = useQuery(
     queryOptions({
-      queryKey: ['user-side-card', session?.user.login],
-      queryFn: () => getSideCardDetailsByGithubUsername(session?.user.login || ""),
-      enabled: !!session?.user.login,
+      queryKey: ['user-side-card', githubUsername],
+      queryFn: () => getSideCardDetailsByGithubUsername(githubUsername),
+      enabled: !!githubUsername,
       staleTime: 1000 * 60 * 5, // avoid instant refetch
       gcTime: 1000 * 60 * 30, // keep data cached longer
     }),
@@ -167,24 +169,24 @@ export function ProfileData() {
       <Card className="@container/card p-6 rounded-2xl shadow-md">
         <div className="flex flex-col space-y-4 items-center text-center">
           <Image
-            src={session?.user.avatar_url || "/default-avatar.png"}
+            src={user.image || "/default-avatar.png"}
             alt="GitHub Avatar"
             width={144}
             height={144}
             className="rounded-full"
           />
-          <h2 className="text-lg font-semibold mt-4">{session?.user.name}</h2>
+          <h2 className="text-lg font-semibold mt-4">{user.name}</h2>
           <p className="text-sm text-muted-foreground">
             @
             <a
               className="border-b-2"
-              href={`https://github.com/` + session?.user.login}
+              href={`https://github.com/` + githubUsername}
             >
-              {session?.user.login}
+              {githubUsername}
             </a>
           </p>
           <p className="text-sm mt-2 text-muted-foreground">
-            {userData?.bio || session?.user.bio}
+            {userData?.bio || user.bio}
           </p>
           <Button variant="outline" size="sm" className="mt-3">
             <Pencil className="h-4 w-4 mr-2" />
@@ -193,15 +195,15 @@ export function ProfileData() {
 
           <div className="flex justify-center gap-8 mt-4 text-sm">
             <div className="text-center">
-              <p className="font-semibold">{session?.user.followers ?? 0}</p>
+              <p className="font-semibold">{user.followers ?? 0}</p>
               <p className="text-muted-foreground">Followers</p>
             </div>
             <div className="text-center">
-              <p className="font-semibold">{session?.user.following ?? 0}</p>
+              <p className="font-semibold">{user.following ?? 0}</p>
               <p className="text-muted-foreground">Following</p>
             </div>
             <div className="text-center">
-              <p className="font-semibold">{session?.user.public_repos ?? 0}</p>
+              <p className="font-semibold">{user.public_repos ?? 0}</p>
               <p className="text-muted-foreground">Repos</p>
             </div>
           </div>
@@ -244,7 +246,7 @@ export function ProfileData() {
 
           {/* Goal Column - Primary Specialization */}
           <div className="flex flex-col items-center justify-center p-3 bg-muted/30 rounded-lg min-h-[180px]">
-            <div className={`w-28 h-36 p-3 rounded-xl border-2 bg-gradient-to-br ${path.gradient} border-white/20 shadow-xl backdrop-blur-sm`}>
+            <div className={`w-28 h-36 p-3 rounded-xl border-2 bg-linear-to-br ${path.gradient} border-white/20 shadow-xl backdrop-blur-sm`}>
               <div className="text-center h-full flex flex-col justify-between">
                 <div>
                   <div className={`w-10 h-10 mx-auto mb-2 rounded-xl bg-white/30 backdrop-blur-sm border border-white/30 flex items-center justify-center p-1.5 shadow-lg`}>
@@ -265,7 +267,7 @@ export function ProfileData() {
                       }}
                     />
                   </div>
-                  <h4 className="text-[10px] font-medium text-white drop-shadow-sm leading-tight px-1 break-words">{path.label}</h4>
+                  <h4 className="text-[10px] font-medium text-white drop-shadow-sm leading-tight px-1 wrap-break-word">{path.label}</h4>
                 </div>
                 
                 {/* Primary Badge */}
@@ -309,7 +311,7 @@ export function ProfileData() {
             </Button>
             <Button variant="default" className="w-1/3">
               <a
-                href={userData?.portfolio_link || "https://github.com/" + session?.user.login}
+                href={userData?.portfolio_link || "https://github.com/" + githubUsername}
                 target="_blank"
                 className="w-full flex justify-center"
               >

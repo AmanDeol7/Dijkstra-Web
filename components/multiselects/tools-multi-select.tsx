@@ -64,7 +64,7 @@ export function ToolsMultiSelect({
           disabled={disabled}
         >
           <div className="flex items-center gap-2 flex-wrap">
-            <Wrench className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+            <Wrench className="w-4 h-4 text-muted-foreground shrink-0" />
             <div className="flex flex-wrap gap-1 flex-1">
               {selectedTools.length > 0 ? (
                 selectedTools.map((toolValue) => {
@@ -119,7 +119,7 @@ export function ToolsMultiSelect({
                     onSelect={() => handleSelect(tool.value)}
                     className="flex items-center gap-2 hover:bg-accent"
                   >
-                    <Wrench className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                    <Wrench className="w-4 h-4 text-muted-foreground shrink-0" />
                     <span className="flex-1">{tool.label}</span>
                     <Check className={cn("ml-auto h-4 w-4", 
                       selectedTools.includes(tool.value) ? "opacity-100" : "opacity-0"

@@ -16,7 +16,7 @@ export default function JobsPage() {
     <div className="min-h-screen bg-background">
       {/* Promo Banner */}
       <div className="container-max mx-auto px-4 py-8">
-        <div className="overflow-hidden rounded-3xl bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 p-8 text-white">
+        <div className="overflow-hidden rounded-3xl bg-linear-to-r from-blue-600 via-purple-600 to-indigo-600 p-8 text-white">
           <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div className="space-y-4">
               <h2 className="text-3xl font-bold">Find Your Dream Job</h2>

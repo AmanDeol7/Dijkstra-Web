@@ -1,15 +1,12 @@
 import { useMemo } from "react";
 import type { OnboardingFormData } from "@/types/client/onboarding/onboarding";
-import { useOAuthAccounts } from "./use-oauth-accounts";
+import { isValidLeetCodeUsername } from "@/lib/onboarding/leetcode-username";
 
-/**
- * Validates LeetCode username format
- */
-function isValidLeetCodeUsername(value: string): boolean {
-  const normalized = value.trim();
-  if (normalized.length === 0) return false;
-  const pattern = /^[A-Za-z0-9_-]{3,20}$/;
-  return pattern.test(normalized);
+/** Passed from the parent so useOAuthAccounts runs once per page. */
+export interface OAuthConnectionFlags {
+  githubConnected: boolean;
+  linkedinConnected: boolean;
+  discordConnected: boolean;
 }
 
 /**
@@ -18,9 +15,10 @@ function isValidLeetCodeUsername(value: string): boolean {
  */
 export function useOnboardingValidation(
   formData: OnboardingFormData,
-  currentStep: number
+  currentStep: number,
+  oauth: OAuthConnectionFlags
 ) {
-  const { githubConnected, linkedinConnected } = useOAuthAccounts();
+  const { githubConnected, linkedinConnected, discordConnected } = oauth;
 
   const validation = useMemo(() => {
     const errors: Record<number, string[]> = {};
@@ -32,22 +30,30 @@ export function useOnboardingValidation(
       errors[1] = ["GitHub account must be connected"];
     }
 
-    // Step 2: Git
-    isValid[2] = formData.gitSetup !== null;
+    // Step 2: Git — must confirm setup (Yes)
+    isValid[2] = formData.gitSetup === true;
     if (!isValid[2]) {
-      errors[2] = ["Please indicate if you have set up Git"];
+      errors[2] =
+        formData.gitSetup === false
+          ? ["Please set up Git using the guide below, then choose Yes to continue"]
+          : ["Please confirm you have set up Git (select Yes)"];
     }
 
-    // Step 3: VS Code
-    isValid[3] = formData.cliKnowledge !== null;
+    // Step 3: VS Code / CLI — must confirm familiarity (Yes)
+    isValid[3] = formData.cliKnowledge === true;
     if (!isValid[3]) {
-      errors[3] = ["Please indicate if you are familiar with CLI"];
+      errors[3] =
+        formData.cliKnowledge === false
+          ? [
+              "Please review the VS Code guide below, then choose Yes when you are comfortable with the CLI",
+            ]
+          : ["Please confirm you are familiar with the CLI (select Yes)"];
     }
 
-    // Step 4: Discord
-    isValid[4] = formData.discordJoined !== null;
+    // Step 4: Discord (OAuth link — same pattern as LinkedIn step 5)
+    isValid[4] = discordConnected;
     if (!isValid[4]) {
-      errors[4] = ["Please indicate if you have joined Discord"];
+      errors[4] = ["Discord account must be linked"];
     }
 
     // Step 5: LinkedIn
@@ -76,7 +82,7 @@ export function useOnboardingValidation(
       formData.primarySpecialization !== "" &&
       formData.secondarySpecializations.length === 3 &&
       formData.timeToUpskill > 0 &&
-      formData.timeToUpskill <= 120 &&
+      formData.timeToUpskill <= 60 &&
       formData.expectedSalary !== "" &&
       formData.selectedTools.length > 0 &&
       formData.dreamCompany !== "" &&
@@ -90,8 +96,8 @@ export function useOnboardingValidation(
       if (formData.secondarySpecializations.length !== 3) {
         errors[7].push("Exactly 3 secondary specializations are required");
       }
-      if (formData.timeToUpskill <= 0 || formData.timeToUpskill > 120) {
-        errors[7].push("Time to upskill must be between 1 and 120 months");
+      if (formData.timeToUpskill <= 0 || formData.timeToUpskill > 60) {
+        errors[7].push("Time to upskill must be between 1 and 60 months (5 years)");
       }
       if (formData.expectedSalary === "") {
         errors[7].push("Expected salary range is required");
@@ -108,7 +114,7 @@ export function useOnboardingValidation(
     }
 
     return { isValid, errors };
-  }, [formData, githubConnected, linkedinConnected]);
+  }, [formData, githubConnected, linkedinConnected, discordConnected]);
 
   const canProceed = validation.isValid[currentStep] ?? false;
   const errors = validation.errors[currentStep] ?? [];

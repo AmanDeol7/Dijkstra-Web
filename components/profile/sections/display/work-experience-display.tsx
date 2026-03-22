@@ -48,13 +48,13 @@ export function WorkExperienceDisplay({ data }: WorkExperienceDisplayProps) {
                 <img
                   src={experience.companyLogo.includes('logo.dev') ? `${experience.companyLogo}?token=${process.env.NEXT_PUBLIC_LOGODEV_API_PUBLIC_KEY}` : experience.companyLogo}
                   alt={`${experience.companyName} logo`}
-                  className="w-16 h-16 rounded-lg object-contain border bg-white flex-shrink-0"
+                  className="w-16 h-16 rounded-lg object-contain border bg-white shrink-0"
                 />
               ) : (
                 <img
                   src={`/abstract-geometric-shapes.png?key=kh3mj&height=48&width=48`}
                   alt={`${experience.companyName || 'company'} logo`}
-                  className="w-16 h-16 rounded-lg object-cover border flex-shrink-0"
+                  className="w-16 h-16 rounded-lg object-cover border shrink-0"
                 />
               )}
               <div className="flex-1 min-w-0">
@@ -88,7 +88,7 @@ export function WorkExperienceDisplay({ data }: WorkExperienceDisplayProps) {
               </div>
               
               {/* Employment Details - Side Panel */}
-              <div className="flex flex-col gap-2 min-w-0 flex-shrink-0">
+              <div className="flex flex-col gap-2 min-w-0 shrink-0">
                 {experience.location && (
                   <Badge variant="outline" className="text-xs text-right">
                     {experience.location.city}{experience.location.state ? `, ${experience.location.state}` : ''}, {experience.location.country}

@@ -289,7 +289,7 @@ export default function AboutSectionCompanyValues() {
                 <Card className="bg-muted/30 mt-6 p-0">
                   <CardContent className="p-6">
                     <div className="mb-4 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-                      <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-full">
+                      <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full">
                         <Image
                           src={currentValue.testimonial.image}
                           alt={currentValue.testimonial.author}

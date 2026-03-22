@@ -49,7 +49,10 @@ export const personalDetailsSchema = z.object({
   dreamCompanyLogo: z.string().optional(),
   dreamPosition: z.string().min(1, 'Dream position is required'),
   expectedSalaryBucket: z.string().min(1, 'Salary range is required'),
-  timeLeft: z.number().min(1, 'Time frame must be at least 1 month'),
+  timeLeft: z
+    .number()
+    .min(1, 'Time frame must be at least 1 month')
+    .max(60, 'Time frame cannot exceed 60 months (5 years)'),
   primarySpecialization: z.string().min(1, 'Primary specialization is required'),
   secondarySpecializations: z.array(z.string()).max(3, 'Maximum 3 secondary specializations allowed'),
   toolsToLearn: z.array(z.string()).optional(),

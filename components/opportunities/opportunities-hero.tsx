@@ -11,7 +11,7 @@ export default function OpportunitiesHero() {
   ]
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <section className="relative overflow-hidden bg-linear-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02]" />
       <div className="container relative mx-auto px-4 py-20 lg:py-28">
         <div className="mx-auto max-w-4xl text-center">
@@ -22,7 +22,7 @@ export default function OpportunitiesHero() {
 
           <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
             Find Your Dream{" "}
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Career</span>
+            <span className="bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Career</span>
           </h1>
 
           <p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground sm:text-xl">

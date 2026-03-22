@@ -377,7 +377,7 @@ export default function ResumeBuilder({
         <>
       <div className="flex w-full max-w-full overflow-hidden" style={{ height: height }} ref={containerRef}>
         <div 
-          className="border-r border-gray-200 bg-gray-50 flex-shrink-0 overflow-hidden"
+          className="border-r border-gray-200 bg-gray-50 shrink-0 overflow-hidden"
           style={{ width: `${leftPanelWidth}%` }}
         >
           <div className="h-full overflow-y-auto">
@@ -409,7 +409,7 @@ export default function ResumeBuilder({
         </div>
 
         <div 
-          className="bg-white flex-shrink-0 overflow-hidden"
+          className="bg-white shrink-0 overflow-hidden"
           style={{ width: `${100 - leftPanelWidth}%` }}
           ref={previewContainerRef}
         >

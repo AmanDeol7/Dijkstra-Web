@@ -29,11 +29,22 @@ export const SALARY_RANGES = [
   { value: "QUARTZ_1", label: "₹45 L - ₹55 L (Quartz 1)" },
   { value: "QUARTZ_2", label: "₹55 L - ₹60 L (Quartz 2)" },
   { value: "QUARTZ_3", label: "₹60 L - ₹70 L (Quartz 3)" },
-  { value: "AMETHYST_1", label: "₹70 L - ₹80 L (Amethyst 1)" },
-  { value: "AMETHYST_2", label: "₹80 L - ₹90 L (Amethyst 2)" },
-  { value: "AMETHYST_3", label: "₹90 L - ₹1 Cr (Amethyst 3)" },
+  { value: "SAPHIRE_1", label: "₹70 L - ₹80 L (Sapphire 1)" },
+  { value: "SAPHIRE_2", label: "₹80 L - ₹90 L (Sapphire 2)" },
+  { value: "SAPHIRE_3", label: "₹90 L - ₹1 Cr (Sapphire 3)" },
   { value: "OBSIDIAN", label: "₹1 Cr+ (Obsidian)" }
 ] as const;
+
+/** Matches onboarding career step: at most 5 years before applying. */
+export const MAX_TIME_LEFT_MONTHS = 60;
+
+export function clampTimeLeftMonths(
+  months: number | undefined,
+  fallback = 12
+): number {
+  const v = months ?? fallback;
+  return Math.min(MAX_TIME_LEFT_MONTHS, Math.max(1, v));
+}
 
 export const TIME_OPTIONS = [
   { value: 1, label: "1 month" },
@@ -55,12 +66,7 @@ export const TIME_OPTIONS = [
   { value: 42, label: "42 months" },
   { value: 48, label: "48 months" },
   { value: 54, label: "54 months" },
-  { value: 60, label: "60 months" },
-  { value: 72, label: "72 months" },
-  { value: 84, label: "84 months" },
-  { value: 96, label: "96 months" },
-  { value: 108, label: "108 months" },
-  { value: 120, label: "120 months" },
+  { value: 60, label: "60 months (5 years)" },
 ] as const;
 
 export const SKILL_CATEGORIES = [
@@ -126,7 +132,6 @@ export const YEAR_OPTIONS = Array.from(
 ).reverse(); // Most recent years first
 
 // Type exports
-export type SalaryRange = typeof SALARY_RANGES[number]['value'];
 export type TimeOption = typeof TIME_OPTIONS[number]['value'];
 export type SkillCategory = typeof SKILL_CATEGORIES[number];
 export type EducationLevel = typeof EDUCATION_LEVELS[number];

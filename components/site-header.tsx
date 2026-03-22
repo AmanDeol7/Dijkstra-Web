@@ -4,7 +4,6 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { signOut } from "next-auth/react";
 
 import {
   IconBrandGithub,
@@ -33,7 +32,7 @@ import {
   SheetDescription,
 } from "./ui/sheet";
 
-import { handleLogout } from "@/lib/logout";
+import { handleLogout } from "@/lib/auth/logout";
 import { useSettingsStore } from "@/lib/Zustand/settings-store";
 import type { PresetPin, CustomPin } from "@/types/lib/Zustand/settings-store-types";
 import { callGemini } from "@/lib/geminiClient";
