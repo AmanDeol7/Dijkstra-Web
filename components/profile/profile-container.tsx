@@ -29,6 +29,18 @@ export function ProfileContainer() {
   const githubUsername = session?.user?.username ?? "";
   const [editingSections, setEditingSections] = useState<Set<string>>(new Set());
 
+  const githubLogin = session?.user?.login || "";
+
+  // Fetch auth data to get profile_id when it's missing from the session
+  const { data: authData } = useQuery({
+    queryKey: ['auth-data', githubLogin],
+    queryFn: () => getAuthDataByGithubUsername(githubLogin),
+    enabled: !!githubLogin && !session?.user?.profile_id,
+    staleTime: 1000 * 60 * 30,
+  });
+
+  const profileId = session?.user?.profile_id || authData?.profile_id || "";
+
   if (!session?.user?.id) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
