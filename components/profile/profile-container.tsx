@@ -1,7 +1,7 @@
 // Main Profile Container Component
 
 import { useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { authClient } from '@/lib/auth/auth-client';
 import { PersonalDetailsSection } from './sections/personal-details-section';
 import { WorkExperienceSection } from './sections/work-experience-section';
 import { SkillsSection } from './sections/skills-section';
@@ -25,8 +25,21 @@ const PROFILE_SECTIONS = [
 ];
 
 export function ProfileContainer() {
-  const { data: session } = useSession();
+  const { data: session } = authClient.useSession();
+  const githubUsername = session?.user?.username ?? "";
   const [editingSections, setEditingSections] = useState<Set<string>>(new Set());
+
+  const githubLogin = session?.user?.login || "";
+
+  // Fetch auth data to get profile_id when it's missing from the session
+  const { data: authData } = useQuery({
+    queryKey: ['auth-data', githubLogin],
+    queryFn: () => getAuthDataByGithubUsername(githubLogin),
+    enabled: !!githubLogin && !session?.user?.profile_id,
+    staleTime: 1000 * 60 * 30,
+  });
+
+  const profileId = session?.user?.profile_id || authData?.profile_id || "";
 
   if (!session?.user?.id) {
     return (
@@ -66,8 +79,7 @@ export function ProfileContainer() {
         {PROFILE_SECTIONS.map(({ id, component: SectionComponent }) => (
           <SectionComponent
             key={id}
-            profileId={session?.user?.profile_id || ""}
-            githubUserName={session?.user?.login || ""}
+            githubUserName={githubUsername}
             isEditing={editingSections.has(id)}
             onToggleEdit={() => toggleEdit(id)}
           />

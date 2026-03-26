@@ -5,6 +5,7 @@ import { Command, CommandInput, CommandItem, CommandList, CommandEmpty, CommandG
 import { Button } from "@/components/ui/button"
 import { Check, ChevronsUpDown, Plus, MapPin } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { searchLocations } from "@/services/dashboard/LocationService"
 
 interface Location {
   city: string
@@ -47,20 +48,13 @@ export function LocationAutoComplete({ value, onChange, selectedLocation }: Loca
     }
 
     const timeout = setTimeout(() => {
-      fetch(`/api/locations?q=${encodeURIComponent(query)}`)
-        .then((res) => res.json())
-        .then((data)=> {
-          if (Array.isArray(data)) {
-            setLocations(data)
-          } else {
-            setLocations([])
-          }
-        })
-        .catch((err)=> {
+      searchLocations(query)
+        .then((data) => setLocations(data))
+        .catch((err) => {
           console.error("Location search error:", err)
           setLocations([])
         })
-    },300)
+    }, 300)
 
     return () => clearTimeout(timeout)
   }, [query])
@@ -134,7 +128,7 @@ export function LocationAutoComplete({ value, onChange, selectedLocation }: Loca
                                     }} 
                                     className="flex items-center gap-2 hover:bg-accent"
                                 >
-                                    <MapPin className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+                                    <MapPin className="w-5 h-5 text-muted-foreground shrink-0" />
                                     <span className="flex-1 truncate">{formatLocationDisplay(location)}</span>
                                     <Check className={cn("ml-auto h-4 w-4", 
                                         selectedLocation?.city === location.city && 

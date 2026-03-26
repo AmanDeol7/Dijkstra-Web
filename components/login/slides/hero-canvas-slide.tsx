@@ -22,7 +22,7 @@ export function HeroCanvasSlide() {
               opacities={[0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1]}
             />
             {/* Overlay gradient for better text visibility */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-b from-black/30 to-transparent" />
           </div>
 
           {/* Hero Content */}

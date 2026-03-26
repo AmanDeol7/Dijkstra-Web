@@ -3,78 +3,37 @@
 import { Button } from "@/components/ui/button"
 import { DijkstraLogo } from "@/components/login/dijkstra-logo"
 import { Loader2 } from "lucide-react";
-import { useSession, signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { authClient } from "@/lib/auth/auth-client";
 
 export function SignInForm() {
-  const searchParams = useSearchParams();
-  const { data: session } = useSession();
+  const { data: session, isPending } = authClient.useSession();
   const [isLoggingIn, setIsLoggingIn] = useState(false);
-  
-  // Check if we just came back from OAuth
-  const justLoggedIn = searchParams.get('callback') === 'true';
 
-  // Redirect based on onboarding status from session
   useEffect(() => {
-    if (justLoggedIn && session?.user) {
-      console.log('Login verification:', { 
-        githubUsername: session.user.github_user_name || session.user.login,
-        requiresOnboarding: session.user.requires_onboarding 
-      });
-      
-      // Ensure we have GitHub username (either from github_user_name or login field)
-      const githubUsername = session.user.github_user_name || (session.user as any).login;
-      
-      if (!githubUsername) {
-        console.error('GitHub username missing from session');
-        alert('Authentication error: GitHub username not found. Please try logging in again.');
-        return;
-      }
-      
-      // Check onboarding status
-      const requiresOnboarding = session.user.requires_onboarding !== false;
-      
-      if (requiresOnboarding) {
-        console.log('User not onboarded, redirecting to onboarding');
-        window.location.href = '/onboarding';
-      } else {
-        console.log('User onboarded, redirecting to dashboard');
-        window.location.href = '/dashboard';
-      }
+    if (isPending || !session?.user) return;
+
+    if (!session.user.username) {
+      console.error('GitHub username missing from session');
+      return;
     }
-  }, [session, justLoggedIn]);
+
+    if (session.user.completedOnboarding === false) {
+      window.location.href = '/onboarding';
+    } else {
+      window.location.href = '/dashboard';
+    }
+  }, [session, isPending]);
 
   const handleLogin = async () => {
     try {
       setIsLoggingIn(true);
-      const result = await signIn("github", {
-        callbackUrl: "/login?callback=true",
-        redirect: false,
+      await authClient.signIn.social({
+        provider: "github",
+        callbackURL: "/login", // come back here, let the useEffect handle redirect
       });
-
-      if (result?.error) {
-        console.error("GitHub login failed:", result.error);
-        alert("Login failed. Please try again.");
-        setIsLoggingIn(false);
-        return;
-      }
-
-      // If login is successful
-      if (result?.ok && result.url) {
-        if (!localStorage.getItem("githubActionsDone")) {
-          try {
-            await fetch("/api/github-actions");
-            localStorage.setItem("githubActionsDone", "true");
-          } catch (err) {
-            console.warn("GitHub actions failed", err);
-          }
-        }
-
-        // Now manually redirect
-        window.location.href = result.url;
-      }
     } catch (error) {
       console.error("Login error:", error);
       alert("An unexpected error occurred. Please try again later.");
@@ -82,27 +41,17 @@ export function SignInForm() {
     }
   };
 
-  // Show loading state during callback verification
-  if (justLoggedIn && session?.user && (session.user.github_user_name || (session.user as any).login)) {
+  if (isPending || isLoggingIn || session?.user) {
     return (
       <div className="flex w-full flex-col bg-[#ffffff] lg:w-[60%]">
         <div className="p-6">
           <DijkstraLogo />
         </div>
         <div className="flex flex-1 items-center justify-center px-8 pb-12">
-          <div className="w-full max-w-[280px]">
-            <div className="flex flex-col gap-6 text-center">
-              <div className="flex flex-col items-center gap-2">
-                {/*<img src="/icon.png" alt="Dijkstra GPT logo" className="h-32 w-32" />*/}
-                <h1 className="text-2xl font-semibold text-[#1a1a1a]">Verifying your account</h1>
-                <p className="text-[13px] text-[#666666]">
-                  Please wait while we check your account status...
-                </p>
-              </div>
-              <div className="flex justify-center py-8">
-                <Loader2 className="w-8 h-8 animate-spin text-[#1a1a1a]" />
-              </div>
-            </div>
+          <div className="flex flex-col items-center gap-2">
+            <h1 className="text-2xl font-semibold text-[#1a1a1a]">Verifying your account</h1>
+            <p className="text-[13px] text-[#666666]">Please wait while we check your account status...</p>
+            <Loader2 className="w-8 h-8 animate-spin text-[#1a1a1a] mt-8" />
           </div>
         </div>
       </div>
@@ -158,3 +107,61 @@ export function SignInForm() {
     </div>
   )
 }
+
+
+/*
+  // Redirect based on onboarding status from backend
+  useEffect(() => {
+    // Run when coming back from callback, or when already logged in
+    if (isPending || !session?.user) return;
+
+    const username = session.user?.username;
+
+    if (!username) return;
+
+    (async () => {
+      try {
+        const status = await fetch(`/api/onboarding/status?username=${username}`);
+        const data = await status.json();
+        if (data.userId) {
+          // User exists in backend
+          if (data.completedOnboarding) {
+            window.location.href = "/dashboard";
+          } else {
+            window.location.href = "/onboarding";
+          }
+        } else {
+          // User not yet created in backend
+          window.location.href = "/onboarding";
+        }
+      } catch {
+        // On error, prefer onboarding over blocking
+        window.location.href = "/onboarding";
+      }
+    })();
+  }, [session, isPending, justLoggedIn]);
+
+  const handleLogin = async () => {
+    try {
+      setIsLoggingIn(true);
+      const { error } = await authClient.signIn.social({
+        provider: "github",
+        callbackURL: "/dashboard",
+      });
+
+      if (error) {
+        console.error("GitHub login failed:", error);
+        alert("Login failed. Please try again." + error.message);
+        setIsLoggingIn(false);
+        return;
+      } 
+      else {
+        window.location.href = "/dashboard";
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("An unexpected error occurred. Please try again later." + error);
+      setIsLoggingIn(false);
+    }
+  };
+  */

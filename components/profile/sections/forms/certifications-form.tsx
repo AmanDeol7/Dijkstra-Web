@@ -26,7 +26,7 @@ import {
 import { ToolsMultiSelect } from "@/components/multiselects/tools-multi-select";
 import { Edit, Trash2, Save, X } from "lucide-react";
 import { toast } from "sonner";
-import { certificationsSchema, type CertificationsFormData } from "@/lib/profile/schemas";
+import { certificationsSchema, type CertificationsFormData } from "@/types/client/profile-section/schemas";
 import type { CertificationsData, CertificationType, Tools } from "@/types/client/profile-section/profile-sections";
 
 const CERTIFICATION_TYPES: { value: CertificationType; label: string }[] = [
@@ -493,13 +493,13 @@ export function CertificationsForm({
                     <img
                       src={certification.issuingOrganizationLogo}
                       alt={`${certification.issuingOrganization} logo`}
-                      className="w-16 h-16 rounded-lg object-contain border bg-white flex-shrink-0"
+                      className="w-16 h-16 rounded-lg object-contain border bg-white shrink-0"
                     />
                   ) : (
                     <img
                       src={`/abstract-geometric-shapes.png?key=kh3mj&height=48&width=48`}
                       alt={`${certification.issuingOrganization || 'organization'} logo`}
-                      className="w-16 h-16 rounded-lg object-cover border flex-shrink-0"
+                      className="w-16 h-16 rounded-lg object-cover border shrink-0"
                     />
                   )}
                   <div className="flex-1 min-w-0">
@@ -516,7 +516,7 @@ export function CertificationsForm({
                     )}
                   </div>
                 </div>
-                <div className="flex gap-2 flex-shrink-0">
+                <div className="flex gap-2 shrink-0">
                   <Button
                     size="sm"
                     variant="outline"

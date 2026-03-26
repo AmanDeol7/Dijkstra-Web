@@ -2,15 +2,15 @@
 'use client';
 
 import React, { useState, useCallback, useEffect } from 'react';
-import { UserProfileData } from '@/types/document';
+import { UserProfileData } from '@/types/client/dashboard/document';
 import ResumeForm from '@/components/Resume and CV/ResumeBuilder/ResumeForm';
 import LatexPreview from '@/components/Resume and CV/ResumeBuilder/LatexPreview';
-import { ResumeStorageService } from '@/services/ResumeStorageService';
-import { DocumentApiService } from '@/services/DocumentApiService';
-import { generateDeedyLatex, generateRowBasedLatex } from '@/lib/latex-generator';
+import { ResumeStorageService } from '@/services/documents/ResumeStorageService';
+import { DocumentApiService } from '@/services/documents/DocumentApiService';
+import { generateDeedyLatex, generateRowBasedLatex } from '@/services/documents/latex-generator';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCreateDocument, useUpdateDocument } from '@/hooks/documents/useDocumentMutations';
-import type { DocumentCreateResponse } from '@/types/document';
+import type { DocumentCreateResponse } from '@/types/client/dashboard/document';
 import { userProfileData } from '@/data/mockResumeData';
 
 interface ResumeBuilderProps {
@@ -377,7 +377,7 @@ export default function ResumeBuilder({
         <>
       <div className="flex w-full max-w-full overflow-hidden" style={{ height: height }} ref={containerRef}>
         <div 
-          className="border-r border-gray-200 bg-gray-50 flex-shrink-0 overflow-hidden"
+          className="border-r border-gray-200 bg-gray-50 shrink-0 overflow-hidden"
           style={{ width: `${leftPanelWidth}%` }}
         >
           <div className="h-full overflow-y-auto">
@@ -409,7 +409,7 @@ export default function ResumeBuilder({
         </div>
 
         <div 
-          className="bg-white flex-shrink-0 overflow-hidden"
+          className="bg-white shrink-0 overflow-hidden"
           style={{ width: `${100 - leftPanelWidth}%` }}
           ref={previewContainerRef}
         >

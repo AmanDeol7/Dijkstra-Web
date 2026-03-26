@@ -24,14 +24,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { MonthYearPicker } from "../../shared/month-year-picker";
-import { InstitutionAutoComplete } from "@/components/institution-autocomplete";
+import { InstitutionAutoComplete } from "@/components/autocompletes/institution-autocomplete";
 import { LocationAutoComplete } from "@/components/autocompletes/location-autocomplete";
 import { ToolsMultiSelect } from "@/components/multiselects/tools-multi-select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Edit, Trash2, Save, X } from "lucide-react";
 import { toast } from "sonner";
-import { educationSchema, type EducationFormData } from "@/lib/profile/schemas";
-import { SCHOOL_TYPE_OPTIONS, DEGREE_OPTIONS, WORK_LOCATION_TYPE_OPTIONS } from "@/constants/enum-constants";
+import { educationSchema, type EducationFormData } from "@/types/client/profile-section/schemas";
+import { SCHOOL_TYPE_OPTIONS, DEGREE_OPTIONS, WORK_LOCATION_TYPE_OPTIONS } from "@/types/enum-constants";
 import type { EducationData, SchoolType, Degree, WorkLocationType, Location, Tools } from "@/types/client/profile-section/profile-sections";
 
 
@@ -862,13 +862,13 @@ export function EducationForm({
                     <img
                       src={education.schoolLogoUrl.includes('logo.dev') ? `${education.schoolLogoUrl}?token=${process.env.NEXT_PUBLIC_LOGODEV_API_PUBLIC_KEY}` : education.schoolLogoUrl}
                       alt={`${education.schoolName} logo`}
-                      className="w-16 h-16 rounded-lg object-contain border bg-white flex-shrink-0"
+                      className="w-16 h-16 rounded-lg object-contain border bg-white shrink-0"
                     />
                   ) : (
                     <img
                       src={`/abstract-geometric-shapes.png?key=kh3mj&height=48&width=48`}
                       alt={`${education.schoolName || 'institution'} logo`}
-                      className="w-16 h-16 rounded-lg object-cover border flex-shrink-0"
+                      className="w-16 h-16 rounded-lg object-cover border shrink-0"
                     />
                   )}
                   <div className="flex-1 min-w-0">
@@ -876,7 +876,7 @@ export function EducationForm({
                     <p className="text-sm text-muted-foreground">{education.degree} in {education.courseFieldName}</p>
                   </div>
                 </div>
-                <div className="flex gap-2 flex-shrink-0">
+                <div className="flex gap-2 shrink-0">
                   <Button
                     size="sm"
                     variant="outline"

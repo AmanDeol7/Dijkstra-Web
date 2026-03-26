@@ -271,7 +271,6 @@ export interface TestScoresData {
 
 // Common interfaces for forms and display
 export interface ProfileSectionProps {
-  profileId: string;
   githubUserName: string;
   isEditing: boolean;
   onToggleEdit: () => void;
