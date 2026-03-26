@@ -8,11 +8,32 @@ import { EditControls } from "../shared/edit-controls";
 import { PersonalDetailsSkeleton } from "../shared/section-skeleton";
 import { PersonalDetailsError as ErrorComponent } from "../shared/section-error";
 import type { ProfileSectionProps } from "@/types/client/profile-section/profile-sections";
-import { useGetPersonalDetails, useUpdatePersonalDetails } from "@/hooks/profile/use-personal-details";
+import { getPersonalDetailsByGithubUsername } from "@/server/dataforge/User/user";
+import { getPersonalDetailsQuery, updatePersonalDetailsMutation } from "@/server/dataforge/User/QueryOptions/user.queryOptions";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { profileQueryKeys } from "@/lib/profile/query-keys";
 
 export function PersonalDetailsSection({ profileId, githubUserName, isEditing, onToggleEdit }: ProfileSectionProps) {
-  const { data: personalDetails, isLoading, error, refetch } = useGetPersonalDetails(githubUserName);
-  const updateMutation = useUpdatePersonalDetails(githubUserName);
+  /*const { data: personalDetails, isLoading, error, refetch } = usePersonalDetails(githubUserName); Old Way*/
+  const queryClient = useQueryClient();
+
+  const { data: personalDetails, isLoading: isLoading, error: error, refetch } = useQuery(
+    getPersonalDetailsQuery(githubUserName)
+  );
+  //const updateMutation = useUpdatePersonalDetails();
+  const updateMutation = useMutation({
+    ...updatePersonalDetailsMutation,
+    onSuccess: () => {
+      Promise.all([
+        queryClient.invalidateQueries({ 
+          queryKey: ['personal-details', githubUserName]
+        }),
+        queryClient.invalidateQueries({ 
+          queryKey: ['user-side-card', githubUserName]
+        })
+      ]);
+    },
+  });
 
   if (isLoading) return <PersonalDetailsSkeleton />;
   if (error) return <ErrorComponent error={error} onRetry={() => refetch()} />;
@@ -48,7 +69,7 @@ export function PersonalDetailsSection({ profileId, githubUserName, isEditing, o
         {isEditing ? (
           <PersonalDetailsForm 
             data={personalDetails}
-            onUpdate={(data) => updateMutation.mutate({ username: githubUserName, data: data })}
+            onUpdate={(data) => updateMutation.mutate({ username: githubUserName, data })}
             onCancel={onToggleEdit}
             isLoading={updateMutation.isPending}
           />

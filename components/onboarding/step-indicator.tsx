@@ -1,23 +1,52 @@
 "use client";
 
 import { CheckCircle } from "lucide-react";
-import type { StepId } from "@/lib/onboarding/onboarding-steps";
-import { ONBOARDING_STEPS_METADATA } from "@/lib/onboarding/onboarding-steps";
-import { CustomIcon } from "@/components/custom-icon";
+import type { StepId } from "@/lib/Zustand/onboarding-store";
+import { ONBOARDING_STEPS_METADATA } from "@/constants/onboarding-steps";
+
+interface CustomIconProps {
+  iconType: string;
+  className?: string;
+}
+
+const CustomIcon = ({ iconType, className }: CustomIconProps) => {
+  const iconUrls = {
+    git: "https://img.icons8.com/?size=100&id=38389&format=png&color=FFFFFF",
+    vscode: "https://img.icons8.com/ios_filled/512/FFFFFF/visual-studio.png",
+    leetcode:
+      "https://img.icons8.com/?size=100&id=PZknXs9seWCp&format=png&color=FFFFFF",
+    career:
+      "https://img.icons8.com/?size=100&id=123456&format=png&color=FFFFFF",
+  };
+
+  switch (iconType) {
+    case "git":
+    case "vscode":
+    case "leetcode":
+    case "career":
+      return (
+        <img
+          src={iconUrls[iconType as keyof typeof iconUrls] || "/placeholder.svg"}
+          alt={iconType}
+          className={className}
+          style={{ width: "20px", height: "20px" }}
+        />
+      );
+    default:
+      return null;
+  }
+};
 
 interface StepIndicatorProps {
   currentStep: number;
   completedSteps: StepId[];
   onStepClick?: (stepNumber: number) => void;
-  /** When false, top circles are display-only (no navigation). */
-  interactive?: boolean;
 }
 
 export function StepIndicator({
   currentStep,
   completedSteps,
   onStepClick,
-  interactive = true,
 }: StepIndicatorProps) {
   // Get steps excluding welcome
   const steps = ONBOARDING_STEPS_METADATA.slice(1);
@@ -31,28 +60,19 @@ export function StepIndicator({
           const isCompleted = completedSteps.includes(step.id);
           const isCurrent = index + 1 === currentStep;
 
-          const Wrapper = interactive ? "button" : "div";
-          const wrapperProps = interactive
-            ? {
-                type: "button" as const,
-                onClick: () => onStepClick?.(index + 1),
-              }
-            : {};
-
           return (
             <div key={step.id} className="flex items-center">
               <div className="flex flex-col items-center">
-                <Wrapper
-                  {...wrapperProps}
+                <button
+                  onClick={() => onStepClick?.(index + 1)}
                   className={`
-                    w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center border-2 transition-all duration-200
-                    ${interactive ? "cursor-pointer hover:scale-105" : "cursor-default"}
+                    w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center border-2 transition-all duration-200 cursor-pointer hover:scale-105
                     ${
                       isCompleted
                         ? "bg-green-500 border-green-500 text-white"
                         : isCurrent
                         ? "bg-blue-500 border-blue-500 text-white"
-                        : `bg-linear-to-br ${step.color} border-white/30 text-white hover:border-gray-400`
+                        : `bg-gradient-to-br ${step.color} border-white/30 text-white hover:border-gray-400`
                     }
                   `}
                 >
@@ -66,20 +86,17 @@ export function StepIndicator({
                       className="w-4 h-4 sm:w-5 sm:h-5"
                     />
                   )}
-                </Wrapper>
+                </button>
                 <span
                   className={`
-                    mt-1 text-xs font-medium text-center leading-tight
-                    ${interactive ? "cursor-pointer" : "cursor-default"}
+                    mt-1 text-xs font-medium cursor-pointer text-center leading-tight
                     ${
                       isCompleted || isCurrent
                         ? "text-gray-900 dark:text-white"
                         : "text-gray-500"
                     }
                   `}
-                  {...(interactive
-                    ? { onClick: () => onStepClick?.(index + 1) }
-                    : {})}
+                  onClick={() => onStepClick?.(index + 1)}
                 >
                   {step.title}
                 </span>

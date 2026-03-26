@@ -99,7 +99,7 @@ export function Skills() {
                 <span className="block">
                   <span className="inline-block w-3 h-3 bg-red-500 rounded mr-1"></span>4-6 years
                   <span className="inline-block w-3 h-3 bg-purple-500 rounded mr-1 ml-2"></span>6-8 years
-                  <span className="inline-block w-3 h-3 bg-linear-to-r from-black to-yellow-500 rounded mr-1 ml-2"></span>
+                  <span className="inline-block w-3 h-3 bg-gradient-to-r from-black to-yellow-500 rounded mr-1 ml-2"></span>
                   8+ years
                 </span>
               </p>

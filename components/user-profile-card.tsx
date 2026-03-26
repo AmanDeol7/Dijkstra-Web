@@ -4,9 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Github, BookOpen } from "lucide-react"
+import { useSession } from "next-auth/react"
 import { useMemo } from "react"
 import { personalBlogs } from "@/data/mock-data"
-import { authClient } from "@/lib/auth/auth-client"
+
 interface UserProfileCardProps {
   blogStats?: {
     published: number
@@ -16,8 +17,7 @@ interface UserProfileCardProps {
 }
 
 export function UserProfileCard({ blogStats }: UserProfileCardProps) {
-  const { data: session, isPending } = authClient.useSession();
-  const githubUsername = session?.user?.username ?? "";
+  const { data: session, status } = useSession()
 
   // Calculate blog stats from personalBlogs if not provided
   const stats = useMemo(() => {
@@ -31,11 +31,11 @@ export function UserProfileCard({ blogStats }: UserProfileCardProps) {
   }, [blogStats])
 
   // Get user display info from session
-  const displayName = session?.user?.name || githubUsername || "User"
-  const avatarUrl = session?.user?.image
-  const role = session?.user?.role || "user"
-  const githubUrl = githubUsername
-    ? `https://github.com/${githubUsername}`
+  const displayName = session?.user?.name || session?.user?.login || "User"
+  const avatarUrl = session?.user?.avatar_url || session?.user?.image
+  const role = session?.user?.company || session?.user?.bio || "Software Technical Writer"
+  const githubUrl = session?.user?.login 
+    ? `https://github.com/${session.user.login}` 
     : "#"
   
   // Generate initials for avatar fallback
@@ -48,7 +48,7 @@ export function UserProfileCard({ blogStats }: UserProfileCardProps) {
       .slice(0, 2)
   }
 
-  if (isPending) {
+  if (status === "loading") {
     return (
       <Card>
         <CardHeader>
@@ -89,7 +89,7 @@ export function UserProfileCard({ blogStats }: UserProfileCardProps) {
             size="sm" 
             className="flex-1 bg-transparent cursor-pointer"
             onClick={() => window.open(githubUrl, "_blank")}
-            disabled={!githubUsername}
+            disabled={!session?.user?.login}
           >
             <Github className="mr-2 h-4 w-4" />
             GitHub

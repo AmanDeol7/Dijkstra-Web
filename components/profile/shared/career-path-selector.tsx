@@ -11,7 +11,7 @@ import {
 import { X } from "lucide-react";
 import { CareerPathCard } from "./career-path-card";
 import { CAREER_PATHS, type CareerPathKey } from "@/data/career-paths";
-import { groupCareerPathsByFaction } from "@/lib/profile-utils";
+import { groupCareerPathsByFaction } from "@/lib/profile/profile-utils";
 
 interface CareerPathSelectorProps {
   type: 'primary' | 'secondary';
@@ -71,7 +71,7 @@ export function CareerPathSelector({
               <div key={faction} className="space-y-2">
                 {/* Faction Header */}
                 <div className={`flex items-center gap-2 pb-1 border-b border-border`}>
-                  <div className={`w-1 h-4 rounded-full bg-linear-to-b ${factionGradient}`}></div>
+                  <div className={`w-1 h-4 rounded-full bg-gradient-to-b ${factionGradient}`}></div>
                   <h5 className="text-sm font-semibold">{faction}</h5>
                   <span className="text-xs text-muted-foreground">({paths.length})</span>
                 </div>

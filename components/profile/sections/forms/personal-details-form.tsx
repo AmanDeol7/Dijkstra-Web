@@ -1,6 +1,6 @@
 // Personal Details Form Component
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,25 +14,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { personalDetailsSchema, type PersonalDetailsFormData } from "@/types/client/profile-section/schemas";
-import {
-  clampTimeLeftMonths,
-  MAX_TIME_LEFT_MONTHS,
-} from "@/constants/profile.constants";
-import { SALARY_RANGES } from "@/types/enum-constants";
-import {
-  OnboardingPickerWell,
-  onboardingMeterFillClassName,
-  onboardingMeterTrackClassName,
-} from "@/components/onboarding/onboarding-interactive-section";
-import { TimeLeftYearMonthControls } from "@/components/onboarding/time-left-year-month-controls";
-import {
-  formatUpskillYearsSummary,
-  maxMonthForYear,
-  partsToTotalMonths,
-  totalMonthsToParts,
-} from "@/lib/onboarding/upskill-time-left";
-import { formatTimeDisplay, cn } from "@/lib/utils";
+import { personalDetailsSchema, type PersonalDetailsFormData } from "@/lib/profile/schemas";
+import { SALARY_RANGES, TIME_OPTIONS } from "@/constants/profile-constants";
 import { CompanyAutoComplete } from "@/components/autocompletes/company-autocomplete";
 import { LocationAutoComplete } from "@/components/autocompletes/location-autocomplete";
 import { CareerPathSelector } from "../../shared/career-path-selector";
@@ -48,7 +31,6 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormDescription,
   FormMessage,
 } from "@/components/ui/form";
 
@@ -107,25 +89,17 @@ export function PersonalDetailsForm({ data, onUpdate, onCancel, isLoading }: Per
       dreamCompanyLogo: data?.dreamCompanyLogo || "",
       dreamPosition: data?.dreamPosition || "",
       expectedSalaryBucket: data?.expectedSalaryBucket || "UNRANKED",
-      timeLeft: clampTimeLeftMonths(data?.timeLeft, 12),
+      timeLeft: data?.timeLeft || 12,
       primarySpecialization: data?.primarySpecialization || "FULLSTACK",
       secondarySpecializations: data?.secondarySpecializations || [],
       toolsToLearn: data?.toolsToLearn || [],
     },
   });
 
-  useEffect(() => {
-    const raw = data?.timeLeft;
-    if (raw != null && raw > MAX_TIME_LEFT_MONTHS) {
-      form.setValue("timeLeft", clampTimeLeftMonths(raw));
-    }
-  }, [data?.timeLeft, form]);
-
   const onSubmit = (formData: PersonalDetailsFormData) => {
     try {
       onUpdate({
         ...formData,
-        timeLeft: clampTimeLeftMonths(formData.timeLeft, 12),
         expectedSalaryBucket: formData.expectedSalaryBucket as Rank,
         primarySpecialization: formData.primarySpecialization as Domain,
         secondarySpecializations: formData.secondarySpecializations as Domain[],
@@ -433,72 +407,26 @@ export function PersonalDetailsForm({ data, onUpdate, onCancel, isLoading }: Per
             <FormField
               control={form.control}
               name="timeLeft"
-              render={({ field }) => {
-                const total = clampTimeLeftMonths(field.value, 12);
-                const { years, months } = totalMonthsToParts(total);
-                const setClampedTotal = (raw: number) => {
-                  field.onChange(
-                    Math.min(
-                      MAX_TIME_LEFT_MONTHS,
-                      Math.max(1, raw)
-                    )
-                  );
-                };
-                const handleYearsChange = (y: number) => {
-                  const maxM = maxMonthForYear(y);
-                  const newMonths = Math.min(months, maxM);
-                  setClampedTotal(partsToTotalMonths(y, newMonths));
-                };
-                const handleMonthsChange = (m: number) => {
-                  setClampedTotal(partsToTotalMonths(years, m));
-                };
-                return (
-                  <FormItem>
-                    <FormLabel>Time left</FormLabel>
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Time Left</FormLabel>
+                  <Select onValueChange={(value) => field.onChange(parseInt(value))} defaultValue={field.value.toString()}>
                     <FormControl>
-                      <OnboardingPickerWell className="p-4 sm:p-5">
-                        <TimeLeftYearMonthControls
-                          className="mb-4"
-                          years={years}
-                          months={months}
-                          onYearsChange={handleYearsChange}
-                          onMonthsChange={handleMonthsChange}
-                        />
-                        <div className="mb-4 text-center">
-                          <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
-                            Your timeline
-                          </p>
-                          <p className="mt-1 text-sm font-semibold text-foreground">
-                            {formatTimeDisplay(total)}
-                          </p>
-                          <p className="mt-0.5 text-xs font-medium text-primary">
-                            ≈{" "}
-                            {formatUpskillYearsSummary(total)} until
-                            applications
-                          </p>
-                        </div>
-                        <div className={cn(onboardingMeterTrackClassName, "mb-2")}>
-                          <div
-                            className={onboardingMeterFillClassName}
-                            style={{
-                              width: `${Math.min(100, (total / MAX_TIME_LEFT_MONTHS) * 100)}%`,
-                            }}
-                          />
-                        </div>
-                        <div className="flex items-center justify-between text-[11px] text-muted-foreground">
-                          <span>0</span>
-                          <span>60 months max</span>
-                        </div>
-                      </OnboardingPickerWell>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select time frame" />
+                      </SelectTrigger>
                     </FormControl>
-                    <FormDescription>
-                      Use the arrows to set years and months (1-60 months
-                      total, same cap as onboarding).
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
+                    <SelectContent>
+                      {TIME_OPTIONS.map((time) => (
+                        <SelectItem key={time.value} value={time.value.toString()}>
+                          {time.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
 

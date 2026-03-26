@@ -38,13 +38,18 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { SettingsDialog } from "./settings-dialog";
 import { useState } from "react";
 import { NavSettings } from "./nav-settings";
-import { authClient } from "@/lib/auth/auth-client";
 
-const appSidebarData = {
+const data = {
+  user: {
+    name: "Jonathan Rufus Samuel",
+    email: "jonathan.rufus.samuel@cern.ch",
+    avatar: "/avatars/shadcn.jpg",
+  },
   navMain: [
     {
       title: "Home",
@@ -184,11 +189,14 @@ const appSidebarData = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { data: session, isPending } = authClient.useSession();
-  const user = session?.user;
-  const displayName = user?.name ?? "";
-  const avatarUrl = user?.image ?? "";
-  const email = user?.email ?? "";
+  const { data: session, status } = useSession();
+  const [settingsOpen, setSettingsOpen] = useState(false)
+
+  if (status === "authenticated") {
+    data.user.name = session.user.name || "No name";
+    data.user.email = session.user.email || "No email";
+    data.user.avatar = session.user.avatar_url || session.user.image || ""; // your extended avatar_url or fallback
+  }
 
   return (
     <Sidebar collapsible="offcanvas" {...props}>
@@ -203,13 +211,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={appSidebarData.navMain} />
-        <NavDocuments items={appSidebarData.challenges} title="Challenges" />
-        <NavDocuments items={appSidebarData.opportunities} title="Opportunities" />
-        <NavSettings items={appSidebarData.navSecondary} className="mt-auto" />
+        <NavMain items={data.navMain} />
+        <NavDocuments items={data.challenges} title="Challenges" />
+        <NavDocuments items={data.opportunities} title="Opportunities" />
+        <NavSettings items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={{ name: displayName, email: email, avatar: avatarUrl }} />
+        <NavUser user={data.user} />
       </SidebarFooter>
     </Sidebar>
   );

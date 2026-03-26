@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -9,20 +8,31 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import CalendarHeatmap from "react-calendar-heatmap";
 import type ReactCalendarHeatmapNS from "react-calendar-heatmap";
 import { Tooltip as ReactTooltip } from "react-tooltip";
-import { useFetchGithubCommitDataByDateRange } from "@/hooks/gitripper/use-fetch-commit-data";
-import { getYearRange } from "@/lib/utils";
 
-export function ContributionHeatmap({ username }: { username: string }) {
+export function ContributionHeatmap() {
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
-  type HeatmapValue = { date: Date; count?: number };
-  const { startDate, endDate } = getYearRange(currentYear)
-  const { data, isLoading, isError } = useFetchGithubCommitDataByDateRange(startDate, endDate, username)
+  const [tooltipContent, setTooltipContent] = useState("");
 
-  const yearData: HeatmapValue[] =
-  data?.map((d: any) => ({
-    date: new Date(d.date),
-    count: d.Github,
-  })) ?? []
+  type HeatmapValue = { date: Date; count?: number };
+
+  const generateYearData = (year: number): HeatmapValue[] => {
+    const data: HeatmapValue[] = [];
+    const startDate = new Date(year, 0, 1);
+    const endDate = new Date(year, 11, 31);
+
+    const currentDate = new Date(startDate);
+    while (currentDate <= endDate) {
+      data.push({
+        date: new Date(currentDate),
+        count: Math.floor(Math.random() * 5),
+      });
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    return data;
+  };
+
+  const yearData = useMemo(() => generateYearData(currentYear), [currentYear]);
 
   const totalContributions = yearData.reduce((sum, day) => sum + (day.count || 0), 0);
 
@@ -65,16 +75,7 @@ export function ContributionHeatmap({ username }: { username: string }) {
       <CardContent>
         <div className="">
           <div className="contribution-heatmap">
-            {isLoading ? (
-            <div className="text-center py-10 text-muted-foreground">
-              Loading contributions...
-            </div>
-          ) : isError ? (
-            <div className="text-center py-10 text-red-500">
-              Failed to load GitHub data
-            </div>
-          ) : (
-              <CalendarHeatmap
+            <CalendarHeatmap
               startDate={new Date(currentYear, 0, 1)}
               endDate={new Date(currentYear, 11, 31)}
               values={yearData}
@@ -89,8 +90,6 @@ export function ContributionHeatmap({ username }: { username: string }) {
                   : "No contributions",
               }) as ReactCalendarHeatmapNS.TooltipDataAttrs}
             />
-       )}
-            
           </div>
 
           <ReactTooltip id="calendar-tooltip" />

@@ -33,7 +33,7 @@ import {
   isFellowship,
   isProject,
   isJobPosition,
-} from "../types/client/opportunities/opportunities-types";
+} from "../types";
 
 interface DetailPageProps {
   item: DetailItem;
