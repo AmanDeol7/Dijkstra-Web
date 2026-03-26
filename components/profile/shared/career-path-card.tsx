@@ -26,7 +26,7 @@ export function CareerPathCard({
     <div
       className={`${displayMode ? 'w-32 h-40 p-4' : 'w-auto h-auto p-3'} rounded-xl border-2 cursor-pointer transition-all duration-300 hover:scale-105 ${
         displayMode
-          ? `bg-linear-to-br ${path.gradient} border-white/20 ${isPrimary ? 'shadow-2xl ring-2 ring-white/50' : 'shadow-lg'} backdrop-blur-sm`
+          ? `bg-gradient-to-br ${path.gradient} border-white/20 ${isPrimary ? 'shadow-2xl ring-2 ring-white/50' : 'shadow-lg'} backdrop-blur-sm`
           : isPrimary
           ? "border-primary bg-primary/10 ring-2 ring-primary/50"
           : isSecondary
@@ -37,7 +37,7 @@ export function CareerPathCard({
     >
       <div className="text-center h-full flex flex-col justify-between">
         <div>
-          <div className={`${displayMode ? 'w-12 h-12' : 'w-12 h-12'} mx-auto mb-3 rounded-2xl ${displayMode ? 'bg-white/30 backdrop-blur-sm border border-white/30' : `bg-linear-to-br ${path.gradient}`} flex items-center justify-center p-2 shadow-lg`}>
+          <div className={`${displayMode ? 'w-12 h-12' : 'w-12 h-12'} mx-auto mb-3 rounded-2xl ${displayMode ? 'bg-white/30 backdrop-blur-sm border border-white/30' : `bg-gradient-to-br ${path.gradient}`} flex items-center justify-center p-2 shadow-lg`}>
             <img 
               src={`/${path.icon}`} 
               alt={path.label}

@@ -38,7 +38,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { HomeFeed } from "@/components/home-feed";
-import { authClient } from "@/lib/auth/auth-client";
+import { useSession } from "next-auth/react";
 import { Pie, Label } from "recharts";
 import {
   ChartConfig,
@@ -54,11 +54,15 @@ export default function Homepage() {
   const [studyStreak, setStudyStreak] = useState(12);
   const [problemsSolved, setProblemsSolved] = useState(247);
   const [currentRank, setCurrentRank] = useState(1847);
-  const { data: session, isPending } = authClient.useSession();
-  const user = session?.user;
-  const githubUsername = user?.username ?? "";
-  const displayName = user?.name ?? "";
-  const avatarUrl = user?.image ?? "";
+  const { data: session, status } = useSession();
+
+  // Mock user data instead of using useSession
+  const mockUser = {
+    login: session?.user.login,
+    name: session?.user.name,
+    email: session?.user.email,
+    image: session?.user.image,
+  };
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -205,7 +209,7 @@ export default function Homepage() {
           {/* Left sidebar */}
           <div className="col-span-12 md:col-span-3 lg:col-span-2">
             <Card
-              className="@container/card bg-linear-to-t from-primary/5 to-card dark:bg-card shadow-xs"
+              className="@container/card bg-gradient-to-t from-primary/5 to-card dark:bg-card shadow-xs"
               data-slot="card"
             >
               <CardContent className="p-4">
@@ -213,18 +217,18 @@ export default function Homepage() {
                 <div className="flex flex-col items-center mb-6">
                   <Avatar className="h-24 w-24 mb-3">
                     <AvatarImage
-                      src={avatarUrl || "/placeholder.svg"}
-                      alt={displayName}
+                      src={mockUser.image || "/placeholder.svg"}
+                      alt={mockUser.name}
                     />
                     <AvatarFallback className="bg-secondary text-secondary-foreground text-lg">
-                      {displayName?.charAt(0).toUpperCase()}
+                      {mockUser.name?.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <h2 className="text-lg font-semibold text-foreground">
-                    {displayName}
+                    {mockUser.name}
                   </h2>
                   <p className="text-sm text-muted-foreground">
-                    @<a className="border-b-2" href={`https://github.com/${githubUsername}`}>{githubUsername}</a>
+                    @<a className="border-b-2" href={`https://github.com/${mockUser.login}`}>{mockUser.login}</a>
                   </p>
                 </div>
 
@@ -323,7 +327,7 @@ export default function Homepage() {
             <div className="grid gap-6">
               {/* Hero section */}
               <Card
-                className="bg-linear-to-r from-blue-600 to-purple-600 text-white border-0 overflow-hidden"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0 overflow-hidden"
                 data-slot="card"
               >
                 <CardContent className="p-8 relative">
@@ -332,7 +336,7 @@ export default function Homepage() {
 
                   <div className="relative z-10">
                     <h1 className="text-3xl font-bold mb-2">
-                      Welcome back, {displayName}! 👋
+                      Welcome back, {mockUser.login}! 👋
                     </h1>
                     <p className="text-blue-100 mb-6">
                       Ready to level up your coding skills today?
@@ -385,7 +389,7 @@ export default function Homepage() {
 
               {/* Learning paths and practice */}
               <Card
-                className="bg-linear-to-t from-primary/5 to-card dark:bg-card shadow-xs"
+                className="bg-gradient-to-t from-primary/5 to-card dark:bg-card shadow-xs"
                 data-slot="card"
               >
                 <CardHeader>
@@ -539,7 +543,7 @@ export default function Homepage() {
               {/* Recent activity and achievements */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Card
-                  className="bg-linear-to-t from-primary/5 to-card dark:bg-card shadow-xs"
+                  className="bg-gradient-to-t from-primary/5 to-card dark:bg-card shadow-xs"
                   data-slot="card"
                 >
                   <CardHeader>
@@ -583,7 +587,7 @@ export default function Homepage() {
                 </Card>
 
                 <Card
-                  className="bg-linear-to-t from-primary/5 to-card dark:bg-card shadow-xs"
+                  className="bg-gradient-to-t from-primary/5 to-card dark:bg-card shadow-xs"
                   data-slot="card"
                 >
                   <CardHeader>
@@ -637,7 +641,7 @@ export default function Homepage() {
             <div className="grid gap-6">
               {/* Daily challenge */}
               <Card
-                className="bg-linear-to-br from-orange-500 to-yellow-500 text-white border-0"
+                className="bg-gradient-to-br from-orange-500 to-yellow-500 text-white border-0"
                 data-slot="card"
               >
                 <CardContent className="p-6">
@@ -667,7 +671,7 @@ export default function Homepage() {
 
               {/* Study schedule */}
               <Card
-                className="bg-linear-to-t from-primary/5 to-card dark:bg-card shadow-xs"
+                className="bg-gradient-to-t from-primary/5 to-card dark:bg-card shadow-xs"
                 data-slot="card"
               >
                 <CardHeader>
@@ -706,7 +710,7 @@ export default function Homepage() {
 
               {/* Leaderboard */}
               <Card
-                className="bg-linear-to-t from-primary/5 to-card dark:bg-card shadow-xs"
+                className="bg-gradient-to-t from-primary/5 to-card dark:bg-card shadow-xs"
                 data-slot="card"
               >
                 <CardHeader>
@@ -751,7 +755,7 @@ export default function Homepage() {
 
               {/* Quick actions */}
               <Card
-                className="bg-linear-to-t from-primary/5 to-card dark:bg-card shadow-xs"
+                className="bg-gradient-to-t from-primary/5 to-card dark:bg-card shadow-xs"
                 data-slot="card"
               >
                 <CardHeader>
@@ -881,7 +885,7 @@ function QuickStatCard({
 
   return (
     <Card
-      className="bg-linear-to-t from-primary/5 to-card dark:bg-card shadow-xs"
+      className="bg-gradient-to-t from-primary/5 to-card dark:bg-card shadow-xs"
       data-slot="card"
     >
       <CardContent className="p-4">

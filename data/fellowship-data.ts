@@ -1,4 +1,4 @@
-import { Fellowship } from "@/types/client/opportunities/opportunities-types";
+import { Fellowship } from "@/types";
 
 export const fellowships: Fellowship[] = [
   // Google Summer of Code

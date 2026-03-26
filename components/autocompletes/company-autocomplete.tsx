@@ -5,7 +5,6 @@ import { Command, CommandInput, CommandItem, CommandList, CommandEmpty, CommandG
 import { Button } from "../ui/button"
 import { Check, ChevronsUpDown, Plus } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { searchCompanies } from "@/services/dashboard/CompanyService"
 
 interface Company {
   name: string
@@ -23,17 +22,9 @@ interface CompanyAutoCompleteProps {
   value: string
   onChange: (company: CompanyData) => void
   selectedCompany?: CompanyData | null
-  triggerClassName?: string
-  contentClassName?: string
 }
 
-export function CompanyAutoComplete({
-  value,
-  onChange,
-  selectedCompany,
-  triggerClassName,
-  contentClassName,
-}: CompanyAutoCompleteProps) {
+export function CompanyAutoComplete({ value, onChange, selectedCompany }: CompanyAutoCompleteProps) {
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState(value||"")
   const [companies, setCompanies] = useState<Company[]>([])
@@ -49,13 +40,20 @@ export function CompanyAutoComplete({
     }
 
     const timeout = setTimeout(() => {
-      searchCompanies(query)
-        .then((data) => setCompanies(data))
-        .catch((err) => {
+      fetch(`/api/companies?q=${encodeURIComponent(query)}`)
+        .then((res) => res.json())
+        .then((data)=> {
+          if (Array.isArray(data)) {
+            setCompanies(data)
+          } else {
+            setCompanies([])
+          }
+        })
+        .catch((err)=> {
           console.error("Company search error:", err)
           setCompanies([])
         })
-    }, 300)
+    },300)
 
     return () => clearTimeout(timeout)
   }, [query])
@@ -76,15 +74,7 @@ export function CompanyAutoComplete({
 
     <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              role="combobox"
-              aria-expanded={open}
-              className={cn(
-                "h-11 w-full min-w-0 justify-between gap-2 px-3 text-left font-normal",
-                triggerClassName
-              )}
-            >
+            <Button variant="outline" role="combobox" aria-expanded={open} className="w-[300px] justify-between">
                 <div className="flex items-center gap-2">
                     {selectedCompany?.logo_url ? (
                         <img 
@@ -105,13 +95,7 @@ export function CompanyAutoComplete({
             </Button>
         </PopoverTrigger>
         
-        <PopoverContent
-          className={cn(
-            "w-(--radix-popover-trigger-width) min-w-[280px] max-w-[min(100vw-2rem,420px)] p-0 border bg-popover text-popover-foreground",
-            contentClassName
-          )}
-          align="start"
-        >
+        <PopoverContent className="w-[300px] p-0 bg-popover text-popover-foreground border">
             <Command className="bg-popover text-popover-foreground">
                 <CommandInput placeholder="Search company..." value={query} onValueChange={setQuery} className="text-foreground" />
                 <CommandList className="bg-popover text-popover-foreground">
@@ -141,7 +125,7 @@ export function CompanyAutoComplete({
                                         <img 
                                             src={company.logo_url} 
                                             alt={`${company.name} logo`}
-                                            className="w-5 h-5 object-contain shrink-0"
+                                            className="w-5 h-5 object-contain flex-shrink-0"
                                         />
                                     ) : (
                                         <div className="w-5 h-5 rounded bg-muted flex items-center justify-center text-[10px] font-semibold">

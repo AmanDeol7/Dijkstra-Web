@@ -2,17 +2,11 @@
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 interface StepNavigationProps {
   currentStep: number;
   totalSteps: number;
   canProceed: boolean;
-  validationMessages?: string[];
   onPrev: () => void;
   onNext: () => void;
   isLastStep?: boolean;
@@ -22,7 +16,6 @@ export function StepNavigation({
   currentStep,
   totalSteps,
   canProceed,
-  validationMessages = [],
   onPrev,
   onNext,
   isLastStep = false,
@@ -38,7 +31,7 @@ export function StepNavigation({
         Back
       </Button>
 
-      <div className="flex flex-col items-center gap-2 order-first sm:order-0">
+      <div className="flex flex-col items-center gap-2 order-first sm:order-none">
         <div className="text-sm font-medium text-gray-600 dark:text-gray-400">
           Step {currentStep} of {totalSteps}
         </div>
@@ -59,41 +52,14 @@ export function StepNavigation({
       </div>
 
       {!isLastStep && (
-        <div className="flex w-full flex-col items-stretch sm:w-auto sm:items-end">
-          {!canProceed && validationMessages.length > 0 ? (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <span
-                  tabIndex={0}
-                  className="inline-flex w-full rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:w-auto"
-                >
-                  <Button
-                    type="button"
-                    onClick={onNext}
-                    disabled
-                    className="pointer-events-none flex w-full items-center gap-2 rounded-xl px-4 py-3 opacity-50 sm:w-auto sm:px-6"
-                  >
-                    Next
-                    <ChevronRight className="w-4 h-4" />
-                  </Button>
-                </span>
-              </TooltipTrigger>
-              <TooltipContent side="top" className="max-w-xs">
-                {validationMessages.join(" ")}
-              </TooltipContent>
-            </Tooltip>
-          ) : (
-            <Button
-              type="button"
-              onClick={onNext}
-              disabled={!canProceed}
-              className="flex items-center gap-2 px-4 sm:px-6 py-3 rounded-xl transition-all duration-200 disabled:opacity-50 w-full sm:w-auto"
-            >
-              Next
-              <ChevronRight className="w-4 h-4" />
-            </Button>
-          )}
-        </div>
+        <Button
+          onClick={onNext}
+          disabled={!canProceed}
+          className="flex items-center gap-2 px-4 sm:px-6 py-3 rounded-xl transition-all duration-200 disabled:opacity-50 w-full sm:w-auto"
+        >
+          Next
+          <ChevronRight className="w-4 h-4" />
+        </Button>
       )}
     </div>
   );

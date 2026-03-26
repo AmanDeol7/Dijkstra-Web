@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { DocumentApiService } from '@/services/documents/DocumentApiService';
-import { documentsQueryKeys } from '@/services/documents/query-keys';
+import { DocumentApiService } from '@/services/DocumentApiService';
+import { documentsQueryKeys } from '@/lib/documents/query-keys';
 
 export function useDocuments(githubUsername?: string) {
   return useQuery({

@@ -1,20 +1,20 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { authClient } from "@/lib/auth/auth-client";
+import { useSession } from "next-auth/react";
 import { useQueryClient } from "@tanstack/react-query";
-import type { DocumentResponse } from '@/types/client/dashboard/document';
+import type { DocumentResponse } from '@/types/document';
 import { ResourceSection } from "@/components/Resume and CV/resource-section";
 import { StackedDocumentsTable } from "@/components/Resume and CV/stacked-documents-table";
 import AddResumeModal from "./AddResumeModal";
 import ResumeBuilder from "@/components/Resume and CV/ResumeBuilder/ResumeBuilder";
-import { generateDeedyLatex, generateRowBasedLatex } from '@/services/documents/latex-generator';
-import { ResumeStorageService } from "@/services/documents/ResumeStorageService";
-import { DocumentApiService } from "@/services/documents/DocumentApiService";
+import { generateDeedyLatex, generateRowBasedLatex } from '@/lib/latex-generator';
+import { ResumeStorageService } from "@/services/ResumeStorageService";
+import { DocumentApiService } from "@/services/DocumentApiService";
 import { useDocuments } from '@/hooks/documents/useDocuments';
 import { useCreateDocument, useDeleteDocument } from '@/hooks/documents/useDocumentMutations';
-import { documentsQueryKeys } from '@/services/documents/query-keys';
-import { SavedResumeData, ResumeData, UserProfileData } from "@/types/client/dashboard/document";
+import { documentsQueryKeys } from '@/lib/documents/query-keys';
+import { SavedResumeData, ResumeData, UserProfileData } from "@/types/document";
 
 // Wrapper for the new ResumeBuilder with header/back button
 const ResumeBuilderWrapper = ({
@@ -28,8 +28,8 @@ const ResumeBuilderWrapper = ({
   template?: "deedy" | "row-based";
   documentType?: "resume" | "cv";
 }) => {
-  const { data: session } = authClient.useSession();
-  const githubUsername = session?.user?.username ?? "";
+  const { data: session } = useSession();
+  const githubUsername = session?.user?.github_user_name || "test_user_123"; // Fallback to test user
   
   const isCV = documentType === "cv";
   const docTypeLabel = isCV ? "CV" : "Resume";
@@ -58,7 +58,7 @@ const ResumeBuilderWrapper = ({
                 Editing: {resumeData.title}
               </h1>
               <p className="text-sm text-muted-foreground">
-                {templateSubtitle} {session?.user?.username && `• ${session.user.username}`}
+                {templateSubtitle} {session?.user?.github_user_name && `• ${session.user.github_user_name}`}
               </p>
             </div>
           </div>
@@ -90,7 +90,7 @@ const Resume = ({
 }: {
   onResumeBuildingModeChange?: (isBuilding: boolean) => void;
 }) => {
-  const { data: session } = authClient.useSession();
+  const { data: session } = useSession();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentResumeData, setCurrentResumeData] = useState<ResumeData | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<
@@ -102,7 +102,7 @@ const Resume = ({
   const [savedResumes, setSavedResumes] = useState<SavedResumeData[]>([]);
   const queryClient = useQueryClient();
 
-  const githubUsername = session?.user?.username ?? "";
+  const githubUsername = session?.user?.github_user_name || "test_user_123";
 
   // Use centralized documents hook to fetch user documents
   const { data: docs } = useDocuments(githubUsername);
@@ -349,7 +349,7 @@ const Resume = ({
   }
 
   return (
-    <div className="min-h-screenfont-inter relative bg-linear-to-b from-background to-muted/30 text-card-foreground transition-colors duration-300">
+    <div className="min-h-screenfont-inter relative bg-gradient-to-b from-background to-muted/30 text-card-foreground transition-colors duration-300">
       <div className="relative z-10 py-4 px-2">
         <ResourceSection
           title="Resumes & CV Templates"

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Check, ChevronsUpDown, X, Briefcase } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { DOMAIN_OPTIONS } from "@/types/enum-constants"
+import { DOMAIN_OPTIONS } from "@/constants/enum-constants"
 import type { Domain } from "@/types/client/profile-section/profile-sections"
 
 interface DomainMultiSelectProps {
@@ -64,7 +64,7 @@ export function DomainMultiSelect({
           disabled={disabled}
         >
           <div className="flex items-center gap-2 flex-wrap">
-            <Briefcase className="w-4 h-4 text-muted-foreground shrink-0" />
+            <Briefcase className="w-4 h-4 text-muted-foreground flex-shrink-0" />
             <div className="flex flex-wrap gap-1 flex-1">
               {selectedDomains.length > 0 ? (
                 selectedDomains.map((domainValue) => {
@@ -119,7 +119,7 @@ export function DomainMultiSelect({
                     onSelect={() => handleSelect(domain.value)}
                     className="flex items-center gap-2 hover:bg-accent"
                   >
-                    <Briefcase className="w-4 h-4 text-muted-foreground shrink-0" />
+                    <Briefcase className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                     <span className="flex-1">{domain.label}</span>
                     <Check className={cn("ml-auto h-4 w-4", 
                       selectedDomains.includes(domain.value) ? "opacity-100" : "opacity-0"

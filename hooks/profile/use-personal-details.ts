@@ -1,33 +1,19 @@
 // Custom hook for personal details
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  getPersonalDetailsByGithubUsername,
-  updatePersonalDetailsByGithubUsername,
-} from "@/services/profile/PersonalDetailsService";
-import { PersonalDetailsData } from "@/types/client/profile-section/profile-sections";
+import { useQuery, useMutation, useQueryClient, queryOptions } from '@tanstack/react-query';
+import { personalDetailsQuery, updatePersonalDetailsMutation } from '@/lib/profile/query-options';
+import { profileQueryKeys } from '@/lib/profile/query-keys';
 
-export const useGetPersonalDetails = (username: string) => {
-  return useQuery({
-    queryKey: ["personal-details", username],
-    queryFn: () => getPersonalDetailsByGithubUsername(username),
-    enabled: !!username,
-    staleTime: 1000 * 60 * 5, // avoid instant refetch
-    gcTime: 1000 * 60 * 30, // keep data cached longer
-  });
-};
-
-export const useUpdatePersonalDetails = (username: string) => {
+export function useUpdatePersonalDetails() {
   const queryClient = useQueryClient();
-
+  
   return useMutation({
-    mutationFn: ({ username, data }: { username: string; data: Partial<PersonalDetailsData> }) =>
-      updatePersonalDetailsByGithubUsername(username, data),
-    onSuccess: () => {
-      // Invalidate and refetch work experience data
-      queryClient.invalidateQueries({
-        queryKey: ["personal-details", username],
+    ...updatePersonalDetailsMutation,
+    onSuccess: (_, { userId }) => {
+      // Invalidate and refetch personal details
+      queryClient.invalidateQueries({ 
+        queryKey: profileQueryKeys.personalDetails(userId) 
       });
     },
   });
-};
+}

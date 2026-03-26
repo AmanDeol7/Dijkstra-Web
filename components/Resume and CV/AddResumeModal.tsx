@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
-import { authClient } from "@/lib/auth/auth-client";
+import { useSession } from "next-auth/react";
 import {
   Dialog,
   DialogContent,
@@ -14,8 +14,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useFetchUserData } from "@/hooks/user/use-fetch-user-data";
-import { transformFullUserProfileToResumeData } from "@/services/documents/transformers/resume-transformers";
-import { UserProfileData, ResumeData } from "@/types/client/dashboard/document";
+import { transformFullUserProfileToResumeData } from "@/lib/user/resume-transformers";
+import { UserProfileData, ResumeData } from "@/types/document";
 
 interface AddResumeModalProps {
   isOpen: boolean;
@@ -35,8 +35,8 @@ export default function AddResumeModal({
   const [selectedDocType, setSelectedDocType] = useState<"resume" | "cv">(
     documentType
   );
-  const { data: session, isPending } = authClient.useSession();
-  const githubUsername = session?.user?.username || "";
+  const { data: session } = useSession();
+  const githubUsername = session?.user?.github_user_name || "";
 
   const {
     data: userData,

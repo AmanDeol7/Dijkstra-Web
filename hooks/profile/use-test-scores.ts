@@ -1,72 +1,52 @@
 // Custom hook for test scores
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  addTestScoresByGithubUsername,
-  deleteTestScoresByTestScoreId,
-  getTestScoresByGithubUsername,
-  updateTestScoresByTestScoreId,
-} from "@/services/profile/TestScoreService";
-import { TestScoresData } from "@/types/client/profile-section/profile-sections";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { 
+  getTestScoresQuery, 
+  addTestScoreMutation, 
+  updateTestScoresMutation, 
+  deleteTestScoresMutation 
+} from '@/server/dataforge/User/QueryOptions/user.queryOptions';
 
-export const useGetTestScores = (username: string) => {
-  return useQuery({
-    queryKey: ["test-scores", username],
-    queryFn: () => getTestScoresByGithubUsername(username),
-    enabled: !!username,
-    staleTime: 1000 * 60 * 5, // avoid instant refetch
-    gcTime: 1000 * 60 * 30, // keep data cached longer
-  });
-};
+export function useTestScores(username: string) {
+  return useQuery(getTestScoresQuery(username));
+}
 
-export const useAddTestScore = (username: string) => {
+export function useAddTestScore(username: string) {
   const queryClient = useQueryClient();
-
+  
   return useMutation({
-    mutationFn: ({
-      data,
-    }: {
-      data: Omit<TestScoresData, "id" | "createdAt" | "updatedAt">;
-    }) => {
-      return addTestScoresByGithubUsername(data);
-    },
+    ...addTestScoreMutation,
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["test-scores", username],
+      queryClient.invalidateQueries({ 
+        queryKey: ['test-scores', username] 
       });
     },
   });
-};
+}
 
-export const useUpdateTestScore = (username: string) => {
+export function useUpdateTestScore(username: string) {
   const queryClient = useQueryClient();
-
+  
   return useMutation({
-    mutationFn: ({
-      testScoreId,
-      data,
-    }: {
-      testScoreId: string;
-      data: Partial<TestScoresData>;
-    }) => updateTestScoresByTestScoreId(testScoreId, data),
+    ...updateTestScoresMutation,
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["test-scores", username],
+      queryClient.invalidateQueries({ 
+        queryKey: ['test-scores', username] 
       });
     },
   });
-};
+}
 
-export const useDeleteTestScore = (username: string) => {
+export function useDeleteTestScore(username: string) {
   const queryClient = useQueryClient();
-
+  
   return useMutation({
-    mutationFn: ({ testScoreId }: { testScoreId: string }) =>
-      deleteTestScoresByTestScoreId(testScoreId),
+    ...deleteTestScoresMutation,
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["test-scores", username],
+      queryClient.invalidateQueries({ 
+        queryKey: ['test-scores', username] 
       });
     },
   });
-};
+}

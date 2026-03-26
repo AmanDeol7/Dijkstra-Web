@@ -782,7 +782,7 @@ export default function DijkstraGPT() {
   // ============================================
 
   return (
-    <div className="bg-linear-to-br from-background via-background to-muted/20 flex flex-col w-full h-full">
+    <div className="bg-gradient-to-br from-background via-background to-muted/20 flex flex-col w-full h-full">
       {/* ==================== MAIN CHAT AREA ==================== */}
       <div className="flex-1 flex min-h-0">
         <div className="flex-1 flex flex-col relative min-h-0">
@@ -790,7 +790,7 @@ export default function DijkstraGPT() {
           {!hasMessages && !isLoading ? (
             <>
               {/* Header - matches original layout */}
-              <div className="shrink-0 text-center pt-4 pb-8">
+              <div className="flex-shrink-0 text-center pt-4 pb-8">
                 <div className="flex flex-col items-center space-y-2 my-8">
                   <img src="/icon.png" alt="Dijkstra GPT logo" className="h-30 w-30" />
                   <h2 className="text-2xl font-semibold">Your Personal CS Prep Assistant</h2>
@@ -819,7 +819,7 @@ export default function DijkstraGPT() {
                           aria-label={`Use example prompt: ${example}`}
                         >
                           <div className="flex items-start gap-3">
-                            <div className="w-8 h-8 bg-linear-to-br from-black/10 to-green-800/10 rounded-lg flex items-center justify-center shrink-0 group-hover:from-black/20 group-hover:to-green-800/20 transition-colors">
+                            <div className="w-8 h-8 bg-gradient-to-br from-black/10 to-green-800/10 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:from-black/20 group-hover:to-green-800/20 transition-colors">
                               <MessageSquare className="h-4 w-4 text-green-800" />
                             </div>
                             <span className="text-sm font-medium text-foreground/80 group-hover:text-foreground transition-colors leading-relaxed">
@@ -863,7 +863,7 @@ export default function DijkstraGPT() {
 
           {/* ==================== INPUT AREA - SINGLE INSTANCE THAT MOVES ==================== */}
           {hasMessages ? (
-            <div className="shrink-0 sticky bottom-0 p-6 border-t border-border/50 bg-linear-to-br from-black/2 via-black/2 to-black/2 backdrop-blur-sm z-10 transition-all duration-500 ease-in-out">
+            <div className="flex-shrink-0 sticky bottom-0 p-6 border-t border-border/50 bg-gradient-to-br from-black/2 via-black/2 to-black/2 backdrop-blur-sm z-10 transition-all duration-500 ease-in-out">
               <div className="w-full max-w-4xl mx-auto">
                 {renderInputArea(false)}
               </div>
@@ -898,7 +898,7 @@ export default function DijkstraGPT() {
             }}
           >
             {/* Sidebar header */}
-            <div className="shrink-0 p-4 border-b border-border/30 bg-linear-to-b from-transparent to-muted/20">
+            <div className="flex-shrink-0 p-4 border-b border-border/30 bg-gradient-to-b from-transparent to-muted/20">
               {/* Title */}
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-base font-semibold flex items-center gap-2 text-foreground/90">
@@ -971,7 +971,7 @@ export default function DijkstraGPT() {
                             <div className="flex items-center gap-2">
                               {/* Session info */}
                               <div className="flex items-center gap-2.5 flex-1 min-w-0">
-                                <div className={`shrink-0 w-7 h-7 rounded-md flex items-center justify-center transition-colors duration-200 ${
+                                <div className={`flex-shrink-0 w-7 h-7 rounded-md flex items-center justify-center transition-colors duration-200 ${
                                   currentSessionId === session.id 
                                     ? "bg-primary/10 text-primary" 
                                     : "bg-muted text-muted-foreground group-hover:bg-muted/80 group-hover:text-foreground"
@@ -991,7 +991,7 @@ export default function DijkstraGPT() {
                               </div>
 
                               {/* Action buttons - Download and Delete */}
-                              <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-all duration-200 shrink-0">
+                              <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-all duration-200 flex-shrink-0">
                                 {/* Download button */}
                                 <Button
                                   variant="ghost"

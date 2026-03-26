@@ -12,7 +12,7 @@ export default function OpportunitiesPromoBanner() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="overflow-hidden rounded-3xl bg-linear-to-r from-violet-600 via-indigo-600 to-blue-600 p-8 text-white"
+        className="overflow-hidden rounded-3xl bg-gradient-to-r from-violet-600 via-indigo-600 to-blue-600 p-8 text-white"
       >
         <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <div className="space-y-4">

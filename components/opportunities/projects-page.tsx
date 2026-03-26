@@ -18,7 +18,7 @@ export default function ProjectsPage() {
     <div className="min-h-screen bg-background">
       {/* Promo Banner */}
       <div className="container-max mx-auto px-4 py-8">
-        <div className="overflow-hidden rounded-3xl bg-linear-to-r from-orange-600 via-red-600 to-pink-600 p-8 text-white">
+        <div className="overflow-hidden rounded-3xl bg-gradient-to-r from-orange-600 via-red-600 to-pink-600 p-8 text-white">
           <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div className="space-y-4">
               <Badge className="bg-white/20 text-white hover:bg-white/30 rounded-xl">Open Source</Badge>

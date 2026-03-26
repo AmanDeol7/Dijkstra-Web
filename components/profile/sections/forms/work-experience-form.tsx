@@ -25,8 +25,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Edit, Trash2, Save, X } from "lucide-react";
 import { toast } from "sonner";
-import { workExperienceSchema, type WorkExperienceFormData } from "@/types/client/profile-section/schemas";
-import { EMPLOYMENT_TYPE_OPTIONS, WORK_LOCATION_TYPE_OPTIONS } from "@/types/enum-constants";
+import { workExperienceSchema, type WorkExperienceFormData } from "@/lib/profile/schemas";
+import { EMPLOYMENT_TYPE_OPTIONS, WORK_LOCATION_TYPE_OPTIONS } from "@/constants/enum-constants";
 import type { WorkExperienceData, EmploymentType, WorkLocationType, Domain, Tools, Location } from "@/types/client/profile-section/profile-sections";
 
 interface WorkExperienceFormProps {
@@ -798,13 +798,13 @@ export function WorkExperienceForm({
                     <img
                       src={experience.companyLogo.includes('logo.dev') ? `${experience.companyLogo}?token=${process.env.NEXT_PUBLIC_LOGODEV_API_PUBLIC_KEY}` : experience.companyLogo}
                       alt={`${experience.companyName} logo`}
-                      className="w-16 h-16 rounded-lg object-contain border bg-white shrink-0"
+                      className="w-16 h-16 rounded-lg object-contain border bg-white flex-shrink-0"
                     />
                   ) : (
                     <img
                       src={`/abstract-geometric-shapes.png?key=kh3mj&height=48&width=48`}
                       alt={`${experience.companyName || 'company'} logo`}
-                      className="w-16 h-16 rounded-lg object-cover border shrink-0"
+                      className="w-16 h-16 rounded-lg object-cover border flex-shrink-0"
                     />
                   )}
                   <div className="flex-1 min-w-0">
@@ -812,7 +812,7 @@ export function WorkExperienceForm({
                     <p className="text-sm text-muted-foreground">{experience.companyName}</p>
                   </div>
                 </div>
-                <div className="flex gap-2 shrink-0">
+                <div className="flex gap-2 flex-shrink-0">
                   <Button
                     size="sm"
                     variant="outline"
